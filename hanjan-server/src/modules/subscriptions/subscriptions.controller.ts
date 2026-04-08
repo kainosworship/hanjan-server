@@ -25,8 +25,12 @@ export class SubscriptionsController {
         });
     }
 
+    @Get('webhook')
     @Post('webhook')
     async handleWebhook(@Req() req: any) {
+        if (req.method === 'GET') {
+            return { status: 'Webhook endpoint is active and public' };
+        }
         // In reality, we verify the signature here using REVENUECAT_WEBHOOK_SECRET
         const { event } = req.body;
 
