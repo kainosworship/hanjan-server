@@ -9,10 +9,10 @@ export class UploadService {
 
     constructor(private configService: ConfigService) {
         this.s3Client = new S3Client({
-            region: this.configService.get('AWS_REGION'),
+            region: this.configService.get('AWS_REGION') || 'ap-northeast-2',
             credentials: {
-                accessKeyId: this.configService.get('AWS_ACCESS_KEY_ID'),
-                secretAccessKey: this.configService.get('AWS_SECRET_ACCESS_KEY'),
+                accessKeyId: this.configService.get('AWS_ACCESS_KEY_ID') || '',
+                secretAccessKey: this.configService.get('AWS_SECRET_ACCESS_KEY') || '',
             },
         });
     }

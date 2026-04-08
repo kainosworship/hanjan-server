@@ -47,9 +47,9 @@ export class ReviewsService {
         if (reviews.length === 0) return;
 
         const total = reviews.length;
-        const convAvg = reviews.reduce((sum, r) => sum + r.conversationScore, 0) / total;
-        const puncAvg = reviews.reduce((sum, r) => sum + r.punctualityScore, 0) / total;
-        const remeetAvg = reviews.reduce((sum, r) => sum + r.remeetScore, 0) / total;
+        const convAvg = reviews.reduce((sum: number, r: any) => sum + (r.conversationScore || 0), 0) / total;
+        const puncAvg = reviews.reduce((sum: number, r: any) => sum + (r.punctualityScore || 0), 0) / total;
+        const remeetAvg = reviews.reduce((sum: number, r: any) => sum + (r.remeetScore || 0), 0) / total;
 
         const overall = (convAvg + puncAvg + remeetAvg) / 3;
 
