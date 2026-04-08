@@ -26,7 +26,7 @@ export class ActivitiesController {
     }
 
     @Get(':id')
-    async getOne(@req() req: any) {
+    async getOne(@Req() req: any) {
         return this.activitiesService.getActivityById(req.params.id);
     }
 }
