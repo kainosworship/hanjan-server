@@ -12,7 +12,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#FFF8F5"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.hanjan.app",
@@ -60,7 +62,10 @@
               "pathPrefix": "/"
             }
           ],
-          "category": ["BROWSABLE", "DEFAULT"]
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
         }
       ]
     },
@@ -99,7 +104,9 @@
       [
         "expo-font",
         {
-          "fonts": ["./src/assets/fonts/Pretendard-Variable.ttf"]
+          "fonts": [
+            "./src/assets/fonts/Pretendard-Variable.ttf"
+          ]
         }
       ]
     ],
@@ -108,9 +115,12 @@
     },
     "extra": {
       "eas": {
-        "projectId": "YOUR_EAS_PROJECT_ID"
+        "projectId": "563ffb5c-5071-484c-8846-3f7be8e48699"
+      },
+      "router": {
+        "origin": false
       }
     },
-    "owner": "YOUR_EXPO_ACCOUNT"
+    "owner": "blessnovas-organization"
   }
 }
