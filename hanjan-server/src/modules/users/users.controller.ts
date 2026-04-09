@@ -1,40 +1,37 @@
-import { Controller, Get, Patch, Body, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Patch, Body, UseGuards, Param, Post } from '@nestjs/common';
 import { UsersService } from './users.service';
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { AuthUser } from '../../common/types/auth.types';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 
-@Controller('users')
 @UseGuards(JwtAuthGuard)
+@Controller('users')
 export class UsersController {
-    constructor(private usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
-    @Get('me')
-    async getMe(@Req() req: any) {
-        return this.usersService.findById(req.user.id);
-    }
+  @Get('me')
+  getMe(@CurrentUser() user: AuthUser) {
+    return this.usersService.findById(user.id);
+  }
 
-    @Patch('profile')
-    async updateProfile(
-        @Req() req: any,
-        @Body() data: { nickname?: string; bio?: string; interests?: string[] },
-    ) {
-        return this.usersService.updateProfile(req.user.id, data);
-    }
+  @Patch('me')
+  updateMe(@CurrentUser() user: AuthUser, @Body() dto: UpdateProfileDto) {
+    return this.usersService.updateProfile(user.id, dto);
+  }
 
-    @Patch('location')
-    async updateLocation(
-        @Req() req: any,
-        @Body() data: { lat: number; lng: number },
-    ) {
-        return this.usersService.updateLocation(req.user.id, data.lat, data.lng);
-    }
+  @Patch('me/location')
+  updateLocation(@CurrentUser() user: AuthUser, @Body() body: { lat: number; lng: number }) {
+    return this.usersService.updateLocation(user.id, body.lat, body.lng);
+  }
 
-    @Patch('push-token')
-    async updatePushToken(@Req() req: any, @Body() data: { token: string }) {
-        return this.usersService.updatePushToken(req.user.id, data.token);
-    }
+  @Get('me/stats')
+  getStats(@CurrentUser() user: AuthUser) {
+    return this.usersService.getStats(user.id);
+  }
 
-    @Get('manner-score')
-    async getMannerScore(@Req() req: any) {
-        return this.usersService.getMannerScore(req.user.id);
-    }
+  @Get(':id/profile')
+  getProfile(@Param('id') id: string) {
+    return this.usersService.getPublicProfile(id);
+  }
 }

@@ -1,0 +1,1012 @@
+한잔 (HANJAN) — Figma 디자인 시스템 가이드 v1.0
+CHAPTER 1. 브랜드 아이덴티티
+1-1. 브랜드 철학 → 디자인 언어 변환
+Copy┌──────────────────────────────────────────────────────┐
+│              브랜드 → 디자인 번역표                      │
+│──────────────────────────────────────────────────────│
+│                                                      │
+│  브랜드 가치           디자인 언어                     │
+│  ─────────────────    ────────────────────────        │
+│  편안한 만남       →   따뜻한 컬러, 부드러운 라운드     │
+│  진짜 사람         →   과한 장식 제거, 미니멀리즘        │
+│  빠른 행동         →   대담한 CTA, 높은 대비            │
+│  안전한 공간       →   밝은 톤, 명확한 아이콘            │
+│  스와이프 거부     →   카드형 UI, 지도 중심 인터페이스   │
+│  즐거운 경험       →   마이크로 인터랙션, 축하 모션      │
+│                                                      │
+│  한 줄 디자인 방향:                                    │
+│  "바에서 친구를 기다리며 메뉴판을 보는 느낌"             │
+│  → 따뜻하고, 읽기 쉽고, 부담 없고, 바로 행동하게 만드는 │
+│                                                      │
+└──────────────────────────────────────────────────────┘
+1-2. 앱 로고 가이드
+Copy┌──────────────────────────────────────────────────────┐
+│                   HANJAN 로고 시스템                    │
+│──────────────────────────────────────────────────────│
+│                                                      │
+│  [심볼 마크]                                          │
+│                                                      │
+│      ┌─────────┐                                     │
+│      │  🍷     │  와인잔을 추상화한 미니멀 아이콘       │
+│      │         │  → 잔의 실루엣 + 사람 두 명이          │
+│      │         │    잔을 기울이는 형태를 하나로 결합     │
+│      └─────────┘                                     │
+│                                                      │
+│  디자인 원칙:                                         │
+│  ├─ 단색 사용 (Primary Coral)                         │
+│  ├─ 모서리: 완전한 라운드 (인간적 느낌)                │
+│  ├─ 선 굵기: 2.5~3pt (앱 아이콘 기준)                 │
+│  └─ 최소 크기: 24×24px에서도 식별 가능                 │
+│                                                      │
+│  [워드 마크]                                          │
+│                                                      │
+│      한잔  HANJAN                                    │
+│                                                      │
+│  ├─ 한글: Pretendard Bold                             │
+│  ├─ 영문: Pretendard SemiBold (소문자 가능)            │
+│  ├─ 자간: -2% (한글), 0% (영문)                       │
+│  └─ 심볼과 워드마크 사이 간격: 8px (1x 기준)           │
+│                                                      │
+│  [사용 규칙]                                          │
+│  ├─ 밝은 배경: Coral 심볼 + Charcoal 워드마크          │
+│  ├─ 어두운 배경: White 심볼 + White 워드마크            │
+│  ├─ 최소 여백: 심볼 높이의 50%를 상하좌우 확보          │
+│  └─ 금지: 그림자, 외곽선, 기울이기, 색상 변경           │
+│                                                      │
+│  [앱 아이콘]                                          │
+│  ├─ iOS: 1024×1024px (마스크 적용됨)                  │
+│  ├─ Android: 512×512px (어댑티브 아이콘)               │
+│  ├─ 배경: Warm White (#FFF8F5)                        │
+│  ├─ 심볼: Primary Coral (#FF6B52)                     │
+│  └─ 패딩: 아이콘 영역의 20% 내부 여백                  │
+│                                                      │
+└──────────────────────────────────────────────────────┘
+CHAPTER 2. 컬러 시스템 (Color System)
+2-1. 컬러 팔레트
+한잔의 컬러는 **"따뜻한 저녁 모임"**의 분위기를 전달합니다. 기존 데이트앱들이 빨강(틴더), 노랑(범블), 검정(힌지)으로 자극적이거나 무겁다면, 한잔은 코럴+앰버의 따뜻하면서도 세련된 톤으로 차별화합니다.
+
+Copy┌──────────────────────────────────────────────────────┐
+│              HANJAN COLOR PALETTE                      │
+│──────────────────────────────────────────────────────│
+│                                                      │
+│  ── PRIMARY COLORS ──                                │
+│                                                      │
+│  ██████  Primary Coral        #FF6B52                │
+│          → 메인 브랜드 컬러, CTA 버튼, 강조            │
+│          → 에너지 있지만 공격적이지 않은 따뜻한 코럴    │
+│                                                      │
+│  ██████  Primary Dark         #E8563F                │
+│          → Coral의 Pressed/Active 상태                │
+│                                                      │
+│  ██████  Primary Light        #FFE8E3                │
+│          → Coral의 배경 하이라이트, 태그 배경           │
+│                                                      │
+│  ── SECONDARY COLORS ──                              │
+│                                                      │
+│  ██████  Amber Glow           #FFB547                │
+│          → 보조 강조, 리워드/축하, 별점                 │
+│          → "한잔 하자"의 따뜻한 조명 느낌               │
+│                                                      │
+│  ██████  Amber Light          #FFF3DB                │
+│          → Amber 배경 하이라이트                       │
+│                                                      │
+│  ── NEUTRAL COLORS ──                                │
+│                                                      │
+│  ██████  Charcoal             #1A1A2E                │
+│          → 주요 텍스트, 헤더                           │
+│                                                      │
+│  ██████  Dark Gray            #4A4A68                │
+│          → 본문 텍스트                                │
+│                                                      │
+│  ██████  Medium Gray          #8E8EA9                │
+│          → 보조 텍스트, 플레이스홀더                    │
+│                                                      │
+│  ██████  Light Gray           #E8E8F0                │
+│          → 구분선, 비활성 상태                         │
+│                                                      │
+│  ██████  Warm White           #FFF8F5                │
+│          → 앱 배경 (순백이 아닌 따뜻한 화이트)          │
+│          → 이게 한잔의 분위기를 만드는 핵심!            │
+│                                                      │
+│  ██████  Pure White           #FFFFFF                │
+│          → 카드 배경, 입력 필드                        │
+│                                                      │
+│  ── SEMANTIC COLORS ──                               │
+│                                                      │
+│  ██████  Success Green        #34C759                │
+│          → 완료, 인증 성공, 온라인 상태                 │
+│                                                      │
+│  ██████  Warning Yellow       #FFCC00                │
+│          → 경고, 타이머 임박                           │
+│                                                      │
+│  ██████  Error Red            #FF3B30                │
+│          → 오류, 실패, 긴급 (비상 버튼)                │
+│                                                      │
+│  ██████  Info Blue            #007AFF                │
+│          → 정보, 링크, 도움말                          │
+│                                                      │
+│  ── CATEGORY COLORS (활동 카테고리) ──                 │
+│                                                      │
+│  ██████  Coffee Brown         #8B6914                │
+│          → ☕ 커피 한잔                                │
+│                                                      │
+│  ██████  Meal Orange          #FF8C42                │
+│          → 🍽️ 같이 밥                                │
+│                                                      │
+│  ██████  Drink Amber          #D4A017                │
+│          → 🍺 한잔 하자                               │
+│                                                      │
+│  ██████  Walk Green           #4CAF50                │
+│          → 🚶 산책/운동                               │
+│                                                      │
+│  ██████  Culture Purple       #9C27B0                │
+│          → 🎨 문화생활                                │
+│                                                      │
+│  ██████  Random Pink          #FF6B9D                │
+│          → 🎲 뭐든 좋아                               │
+│                                                      │
+└──────────────────────────────────────────────────────┘
+2-2. 다크 모드 컬러 매핑
+Copy┌──────────────────────────────────────────────────────┐
+│              DARK MODE MAPPING                        │
+│──────────────────────────────────────────────────────│
+│                                                      │
+│  라이트 모드              다크 모드                    │
+│  ──────────────          ──────────────               │
+│  Warm White #FFF8F5  →   Dark BG    #121220          │
+│  Pure White #FFFFFF  →   Card BG    #1E1E32          │
+│  Charcoal   #1A1A2E  →   Light Text #F5F5FA          │
+│  Dark Gray  #4A4A68  →   Body Text  #C8C8DA          │
+│  Light Gray #E8E8F0  →   Divider    #2A2A42          │
+│                                                      │
+│  Primary Coral, Amber, Semantic → 동일 유지            │
+│  (다크 배경 위에서 오히려 더 돋보임)                    │
+│                                                      │
+│  📌 Figma 구현:                                       │
+│  Variables > Color Mode 컬렉션 생성                   │
+│  "Light" / "Dark" 두 모드로 전환 가능하게 세팅          │
+│                                                      │
+└──────────────────────────────────────────────────────┘
+CHAPTER 3. 타이포그래피 (Typography)
+3-1. 서체 선택
+Copy┌──────────────────────────────────────────────────────┐
+│              HANJAN TYPOGRAPHY                        │
+│──────────────────────────────────────────────────────│
+│                                                      │
+│  PRIMARY FONT: Pretendard Variable                   │
+│                                                      │
+│  선택 이유:                                           │
+│  ├─ 한글 + 영문 + 숫자 완벽 지원 (크로스 플랫폼)       │
+│  ├─ Inter 기반이라 앱 UI에 최적화된 가독성              │
+│  ├─ Variable Font → 9가지 굵기 하나의 파일로 관리       │
+│  ├─ 무료 + 상업적 사용 가능 (OFL 라이선스)              │
+│  ├─ 2026년 한국 앱 UI에서 가장 많이 쓰이는 서체         │
+│  └─ Figma에서 바로 사용 가능                           │
+│                                                      │
+│  FALLBACK: Apple SD Gothic Neo (iOS), Roboto (Android)│
+│                                                      │
+└──────────────────────────────────────────────────────┘
+3-2. 타입 스케일 (Type Scale)
+Copy┌──────────────────────────────────────────────────────┐
+│              TYPE SCALE SYSTEM                        │
+│──────────────────────────────────────────────────────│
+│                                                      │
+│  Token Name        Size   Weight      Line-H  Usage  │
+│  ──────────────    ────   ─────────   ──────  ────── │
+│                                                      │
+│  Display           28px   Bold(700)   36px    축하화면│
+│  "축하합니다!"                                        │
+│                                                      │
+│  H1                24px   Bold(700)   32px    화면제목│
+│  "친구 초대"                                          │
+│                                                      │
+│  H2                20px   SemiBold    28px    섹션제목│
+│                    (600)                              │
+│  "지금 주변 활동"                                      │
+│                                                      │
+│  H3                17px   SemiBold    24px    카드제목│
+│                    (600)                              │
+│  "커피 한잔"                                          │
+│                                                      │
+│  Body-L            16px   Regular     24px    본문큰  │
+│                    (400)                              │
+│  "오늘 좀 지쳤는데 수다 떨 사람"                        │
+│                                                      │
+│  Body-M            15px   Regular     22px    본문기본│
+│                    (400)                              │
+│  "채팅 메시지 텍스트"                                   │
+│                                                      │
+│  Body-S            14px   Regular     20px    본문작은│
+│                    (400)                              │
+│  "📍 350m · ⏰ 30분 후"                               │
+│                                                      │
+│  Caption           12px   Medium      16px    캡션   │
+│                    (500)                              │
+│  "가입 완료 · 4월 5일"                                 │
+│                                                      │
+│  Overline          11px   SemiBold    14px    라벨   │
+│                    (600)                              │
+│  "PLUS"  "NEW"                                       │
+│                                                      │
+│  Button-L          16px   SemiBold    20px    큰버튼  │
+│                    (600)                              │
+│  "활동 올리기"                                         │
+│                                                      │
+│  Button-M          14px   SemiBold    18px    중간버튼│
+│                    (600)                              │
+│  "참여하기"                                           │
+│                                                      │
+│  Button-S          12px   Medium      16px    작은버튼│
+│                    (500)                              │
+│  "복사"                                              │
+│                                                      │
+│  📌 Figma 구현:                                       │
+│  Text Styles로 위 11종 전부 등록                       │
+│  네이밍: "Display", "H1", "H2", "H3",                │
+│  "Body/L", "Body/M", "Body/S",                       │
+│  "Caption", "Overline", "Button/L", "Button/M", "Button/S"│
+│                                                      │
+└──────────────────────────────────────────────────────┘
+CHAPTER 4. 간격 & 그리드 시스템 (Spacing & Grid)
+4-1. 간격 토큰 (Spacing Tokens)
+Copy┌──────────────────────────────────────────────────────┐
+│           SPACING TOKEN SYSTEM (8pt 기반)              │
+│──────────────────────────────────────────────────────│
+│                                                      │
+│  Token       Value    Usage                          │
+│  ─────────   ──────   ──────────────────────         │
+│  space-2xs   2px      아이콘-텍스트 미세 간격          │
+│  space-xs    4px      인라인 요소 간격                 │
+│  space-sm    8px      컴포넌트 내부 최소 패딩          │
+│  space-md    12px     일반 패딩, 아이콘-텍스트 간격     │
+│  space-lg    16px     카드 내부 패딩, 섹션 간격        │
+│  space-xl    20px     섹션 간 구분                    │
+│  space-2xl   24px     화면 좌우 마진                   │
+│  space-3xl   32px     주요 섹션 간 간격                │
+│  space-4xl   40px     화면 상단 여백                   │
+│  space-5xl   48px     대형 간격 (축하 화면 등)         │
+│  space-6xl   64px     특수 목적                       │
+│                                                      │
+│  📌 Figma 구현:                                       │
+│  Variables > Spacing 컬렉션 생성                      │
+│  모든 간격을 토큰으로 관리 (하드코딩 금지)              │
+│                                                      │
+└──────────────────────────────────────────────────────┘
+4-2. 레이아웃 그리드
+Copy┌──────────────────────────────────────────────────────┐
+│              LAYOUT GRID SYSTEM                       │
+│──────────────────────────────────────────────────────│
+│                                                      │
+│  📱 모바일 프레임: 393 × 852px (iPhone 15 기준)        │
+│                                                      │
+│  Column Grid:                                        │
+│  ├─ Columns: 4                                       │
+│  ├─ Margin: 24px (좌우)                              │
+│  ├─ Gutter: 16px                                     │
+│  └─ Column Width: 자동 계산 (약 73.25px)              │
+│                                                      │
+│  ┌──24──┬──73──┬16┬──73──┬16┬──73──┬16┬──73──┬──24──┐│
+│  │margin│ col1 │  │ col2 │  │ col3 │  │ col4 │margin││
+│  └──────┴──────┴──┴──────┴──┴──────┴──┴──────┴──────┘│
+│                                                      │
+│  Row Grid (보조):                                     │
+│  ├─ Rows: 8px baseline                               │
+│  └─ 모든 요소가 8px 단위에 정렬                        │
+│                                                      │
+│  📌 Figma 구현:                                       │
+│  Frame 선택 → Layout Grid 추가                        │
+│  ├─ Grid 1: Columns (4, 24px margin, 16px gutter)    │
+│  └─ Grid 2: Rows (8px, Stretch)                      │
+│                                                      │
+└──────────────────────────────────────────────────────┘
+CHAPTER 5. 컴포넌트 라이브러리 (Component Library)
+5-1. 버튼 시스템 (Buttons)
+Copy┌──────────────────────────────────────────────────────┐
+│              BUTTON COMPONENT SYSTEM                  │
+│──────────────────────────────────────────────────────│
+│                                                      │
+│  ── Primary Button (가장 중요한 액션) ──               │
+│                                                      │
+│  ┌──────────────────────────┐                        │
+│  │     활동 올리기 🎯        │  Default               │
+│  └──────────────────────────┘                        │
+│  BG: #FF6B52 (Primary Coral)                         │
+│  Text: #FFFFFF, Button-L (16px SemiBold)             │
+│  Height: 52px                                        │
+│  Radius: 14px                                        │
+│  Padding: 16px 24px                                  │
+│  Width: Full (좌우 마진 24px 제외)                     │
+│                                                      │
+│  States:                                             │
+│  ├─ Default:  BG #FF6B52                             │
+│  ├─ Pressed:  BG #E8563F                             │
+│  ├─ Disabled: BG #E8E8F0, Text #8E8EA9               │
+│  └─ Loading:  BG #FF6B52 + 스피너                     │
+│                                                      │
+│  ── Secondary Button (보조 액션) ──                    │
+│                                                      │
+│  ┌──────────────────────────┐                        │
+│  │     다음에요 👋           │  Default               │
+│  └──────────────────────────┘                        │
+│  BG: Transparent                                     │
+│  Border: 1.5px #E8E8F0                               │
+│  Text: #4A4A68, Button-L                             │
+│  Height: 52px                                        │
+│  Radius: 14px                                        │
+│                                                      │
+│  ── Text Button (최소 강조) ──                         │
+│                                                      │
+│  "나중에"                                             │
+│  Text: #8E8EA9, Button-M (14px SemiBold)             │
+│  No BG, No Border                                    │
+│  Tap area: 최소 44×44px                               │
+│                                                      │
+│  ── Small Action Button (카드 내) ──                   │
+│                                                      │
+│  ┌────────────┐                                      │
+│  │  참여하기   │                                      │
+│  └────────────┘                                      │
+│  BG: #FFE8E3 (Primary Light)                         │
+│  Text: #FF6B52, Button-M                             │
+│  Height: 36px                                        │
+│  Radius: 10px                                        │
+│  Padding: 8px 16px                                   │
+│                                                      │
+│  ── Icon Button (원형) ──                              │
+│                                                      │
+│  ( 📋 )  ( 🔔 )  ( ← )                              │
+│  Size: 44×44px (터치 영역)                             │
+│  Icon: 24×24px (내부)                                 │
+│  BG: Transparent or Light Gray                       │
+│  Radius: 22px (완전 원형)                              │
+│                                                      │
+│  📌 Figma 구현:                                       │
+│  Component Set "Button" 생성                          │
+│  Properties:                                         │
+│  ├─ Type: Primary / Secondary / Text / SmallAction   │
+│  ├─ State: Default / Pressed / Disabled / Loading    │
+│  ├─ Size: Large(52px) / Medium(44px) / Small(36px)   │
+│  ├─ Icon: None / Left / Right / Only                 │
+│  └─ Label: (텍스트 오버라이드)                         │
+│                                                      │
+└──────────────────────────────────────────────────────┘
+5-2. 카드 컴포넌트 (Cards)
+Copy┌──────────────────────────────────────────────────────┐
+│              CARD COMPONENT SYSTEM                    │
+│──────────────────────────────────────────────────────│
+│                                                      │
+│  ── Activity Card (활동 카드 — 앱의 핵심 UI) ──         │
+│                                                      │
+│  ┌────────────────────────────────────┐              │
+│  │ ☕  커피 한잔                  1:1  │  ← 카테고리  │
+│  │                                    │              │
+│  │ "아메리카노 좋아하는 분?"          │  ← 메시지    │
+│  │                                    │              │
+│  │ 📍 350m · ⏰ 30분 후 · ⭐ 4.5      │  ← 메타정보  │
+│  │                                    │              │
+│  │           ┌────────────┐           │              │
+│  │           │  참여하기   │           │  ← CTA      │
+│  │           └────────────┘           │              │
+│  └────────────────────────────────────┘              │
+│                                                      │
+│  스펙:                                                │
+│  ├─ BG: #FFFFFF (Pure White)                         │
+│  ├─ Border: none                                     │
+│  ├─ Shadow: 0px 2px 12px rgba(26,26,46,0.06)        │
+│  ├─ Radius: 16px                                     │
+│  ├─ Padding: 16px 20px                               │
+│  ├─ 카테고리 아이콘: 28×28px                           │
+│  ├─ 카테고리 텍스트: H3 (17px SemiBold)                │
+│  ├─ 인원 태그: Caption + Primary Light BG              │
+│  ├─ 메시지: Body-L (16px Regular)                     │
+│  ├─ 메타정보: Body-S (14px Regular, Medium Gray)       │
+│  └─ CTA: Small Action Button                         │
+│                                                      │
+│  왼쪽 카테고리 컬러 바:                                │
+│  ├─ Width: 4px, Height: 100%                         │
+│  ├─ Radius: 2px                                      │
+│  └─ Color: 해당 카테고리 컬러                          │
+│     (커피=#8B6914, 밥=#FF8C42 등)                     │
+│                                                      │
+│  ── Match Notification Card (매칭 알림 카드) ──        │
+│                                                      │
+│  ┌────────────────────────────────────┐              │
+│  │        🎉 매칭됐어요!              │              │
+│  │                                    │              │
+│  │     ( 👤 )  제이크                 │              │
+│  │     ⭐ 4.3 · ☕ 8회 경험            │              │
+│  │     📍 450m                        │              │
+│  │                                    │              │
+│  │  ┌──────────┐  ┌──────────┐       │              │
+│  │  │ 수락하기 ☕│  │ 다음에요 │       │              │
+│  │  └──────────┘  └──────────┘       │              │
+│  └────────────────────────────────────┘              │
+│                                                      │
+│  스펙:                                                │
+│  ├─ BG: Gradient (Warm White → Primary Light)        │
+│  ├─ Shadow: 0px 4px 20px rgba(255,107,82,0.15)      │
+│  ├─ Radius: 20px                                     │
+│  ├─ 프로필 이미지: 64×64px, 원형, Border 2px Coral    │
+│  ├─ 닉네임: H2 (20px SemiBold)                       │
+│  ├─ 메타: Body-S (14px, Medium Gray)                 │
+│  ├─ 수락 버튼: Primary Button (Small)                │
+│  └─ 거절 버튼: Secondary Button (Small)               │
+│                                                      │
+│  ── Referral Progress Card (초대 진행 카드) ──         │
+│                                                      │
+│  ┌────────────────────────────────────┐              │
+│  │ 🎁 친구 3명 초대 → Plus 무료!      │              │
+│  │                                    │              │
+│  │  👤✅ ─── 👤✅ ─── 👤⬜            │              │
+│  │                                    │              │
+│  │  ████████████████░░░░░░░░          │              │
+│  │       2/3 달성 (67%)               │              │
+│  │                                    │              │
+│  │     ┌──────────────────┐           │              │
+│  │     │ 지금 초대하기 🎁  │           │              │
+│  │     └──────────────────┘           │              │
+│  └────────────────────────────────────┘              │
+│                                                      │
+│  스펙:                                                │
+│  ├─ BG: Gradient (Amber Light → Warm White)          │
+│  ├─ Radius: 16px                                     │
+│  ├─ 진행도 아이콘: 32×32px, 원형                      │
+│  │   ├─ 완료: Coral BG + White Check                 │
+│  │   └─ 미완료: Light Gray BG + Dashed border        │
+│  ├─ 진행도 바: Height 6px, Radius 3px                 │
+│  │   ├─ Track: #E8E8F0                               │
+│  │   └─ Fill: Gradient (Coral → Amber)               │
+│  └─ CTA: Primary Button (Medium)                     │
+│                                                      │
+│  📌 Figma 구현:                                       │
+│  각 카드를 Component Set으로 생성                      │
+│  Activity Card Properties:                           │
+│  ├─ Category: Coffee/Meal/Drink/Walk/Culture/Random  │
+│  ├─ HasMessage: true/false                           │
+│  ├─ GroupSize: 1:1 / 2:2 / Group                    │
+│  └─ State: Default / Pressed                        │
+│                                                      │
+└──────────────────────────────────────────────────────┘
+5-3. 네비게이션 바 (Navigation Bar)
+Copy┌──────────────────────────────────────────────────────┐
+│              BOTTOM NAVIGATION BAR                    │
+│──────────────────────────────────────────────────────│
+│                                                      │
+│  ┌──────────────────────────────────────────────┐    │
+│  │                                              │    │
+│  │  🗺️지도    ➕만들기    💬채팅    👤프로필     │    │
+│  │  활동 지도  활동 만들기  채팅     내 정보      │    │
+│  │                                              │    │
+│  └──────────────────────────────────────────────┘    │
+│                                                      │
+│  스펙:                                                │
+│  ├─ Height: 83px (Safe Area 포함)                     │
+│  ├─ Content Height: 49px                             │
+│  ├─ BG: #FFFFFF                                      │
+│  ├─ Top Border: 1px #E8E8F0                          │
+│  ├─ 아이콘: 24×24px                                   │
+│  ├─ 라벨: Caption (11px, Medium)                      │
+│  ├─ 아이콘-라벨 간격: 4px                              │
+│  │                                                   │
+│  │  States:                                          │
+│  │  ├─ Active: Icon #FF6B52, Label #FF6B52            │
+│  │  └─ Inactive: Icon #8E8EA9, Label #8E8EA9          │
+│  │                                                   │
+│  │  "만들기" 탭 특수 처리:                             │
+│  │  ├─ 아이콘: 32×32px 원형 Coral BG + White "+"     │
+│  │  └─ 다른 탭보다 살짝 올라온 느낌 (y: -4px)          │
+│  │                                                   │
+│  │  뱃지:                                            │
+│  │  ├─ 채팅 탭: 읽지 않은 메시지 수 (빨간 점/숫자)      │
+│  │  └─ 프로필 탭: 초대 리워드 진행 중 (🎁 아이콘)       │
+│  │                                                   │
+│  └───────────────────────────────────────────────    │
+│                                                      │
+│  📌 Figma:                                           │
+│  Component "BottomNav"                               │
+│  Properties:                                         │
+│  ├─ ActiveTab: Map / Create / Chat / Profile         │
+│  ├─ ChatBadge: none / number                        │
+│  └─ ProfileBadge: none / gift                       │
+│                                                      │
+└──────────────────────────────────────────────────────┘
+5-4. 입력 필드 (Input Fields)
+Copy┌──────────────────────────────────────────────────────┐
+│              INPUT FIELD SYSTEM                       │
+│──────────────────────────────────────────────────────│
+│                                                      │
+│  ── Text Input ──                                    │
+│                                                      │
+│  Default:                                            │
+│  ┌──────────────────────────────┐                    │
+│  │ 닉네임                       │                    │
+│  │ ________________________________│                  │
+│  └──────────────────────────────┘                    │
+│  Label: Caption (12px Medium, Dark Gray)              │
+│  Input: Body-M (15px Regular, Charcoal)              │
+│  Placeholder: Body-M (15px, Medium Gray)             │
+│  BG: #FFFFFF                                         │
+│  Border: 1.5px #E8E8F0                               │
+│  Radius: 12px                                        │
+│  Height: 48px                                        │
+│  Padding: 12px 16px                                  │
+│                                                      │
+│  States:                                             │
+│  ├─ Default: Border #E8E8F0                          │
+│  ├─ Focus: Border #FF6B52, Shadow 0 0 0 3px #FFE8E3 │
+│  ├─ Error: Border #FF3B30, Helper text 빨간색         │
+│  ├─ Success: Border #34C759, 오른쪽 체크 아이콘        │
+│  └─ Disabled: BG #F5F5FA, Text #8E8EA9               │
+│                                                      │
+│  ── Chat Input ──                                    │
+│                                                      │
+│  ┌──────────────────────────────┐                    │
+│  │ 📍  메시지 입력...     [전송] │                    │
+│  └──────────────────────────────┘                    │
+│  BG: #F5F5FA                                         │
+│  Radius: 24px (pill shape)                           │
+│  Height: 44px                                        │
+│  왼쪽 액션 아이콘: 장소 공유 (📍)                      │
+│  오른쪽 전송 버튼: Coral 원형                          │
+│                                                      │
+│  📌 Figma Component Properties:                      │
+│  ├─ State: Default/Focus/Error/Success/Disabled      │
+│  ├─ HasLabel: true/false                             │
+│  ├─ HasHelper: true/false                            │
+│  ├─ LeftIcon: none/icon                              │
+│  └─ RightIcon: none/clear/action                     │
+│                                                      │
+└──────────────────────────────────────────────────────┘
+5-5. 타이머 컴포넌트 (Timer — 한잔 고유)
+Copy┌──────────────────────────────────────────────────────┐
+│           TIMER COMPONENT (한잔 시그니처)               │
+│──────────────────────────────────────────────────────│
+│                                                      │
+│  채팅방 상단에 항상 표시되는 핵심 UI                    │
+│                                                      │
+│  ── 여유로운 상태 (15분 이상) ──                       │
+│  ┌────────────────────────┐                          │
+│  │ ⏱️  24:37              │                          │
+│  └────────────────────────┘                          │
+│  Text: Body-M SemiBold, Dark Gray                    │
+│  Icon: ⏱️ 24px, Medium Gray                          │
+│                                                      │
+│  ── 임박 상태 (5분 이하) ──                            │
+│  ┌────────────────────────┐                          │
+│  │ ⏱️  04:21              │                          │
+│  └────────────────────────┘                          │
+│  Text: Body-M Bold, Warning Yellow (#FFCC00)         │
+│  + 부드러운 pulse 애니메이션                           │
+│                                                      │
+│  ── 위급 상태 (1분 이하) ──                            │
+│  ┌────────────────────────┐                          │
+│  │ ⏱️  0:47               │                          │
+│  └────────────────────────┘                          │
+│  Text: Body-M Bold, Error Red (#FF3B30)              │
+│  + 빠른 pulse 애니메이션                              │
+│                                                      │
+│  📌 Figma:                                           │
+│  Component "Timer"                                   │
+│  Properties:                                         │
+│  ├─ State: Normal / Warning / Urgent                 │
+│  └─ Time: (텍스트 오버라이드)                          │
+│                                                      │
+└──────────────────────────────────────────────────────┘
+5-6. 매너 점수 & 뱃지 (Trust Indicators)
+Copy┌──────────────────────────────────────────────────────┐
+│              TRUST INDICATOR SYSTEM                   │
+│──────────────────────────────────────────────────────│
+│                                                      │
+│  ── 매너 점수 표시 ──                                  │
+│                                                      │
+│  인라인 (카드, 프로필 내):                             │
+│  ⭐ 4.3                                              │
+│  Icon: 16px, Amber Glow                              │
+│  Text: Body-S Bold, Charcoal                         │
+│                                                      │
+│  상세 (프로필 페이지):                                 │
+│  ┌──────────────────────────┐                        │
+│  │ ⭐ 4.3 / 5.0             │                        │
+│  │ ████████████████████░░░░ │ ← Amber gradient       │
+│  │ "대화가 편안해요" (8회)   │                        │
+│  │ "시간 약속을 잘 지켜요" (6회)│                      │
+│  └──────────────────────────┘                        │
+│                                                      │
+│  ── 인증 뱃지 ──                                      │
+│                                                      │
+│  ✅ 신분 인증 완료                                    │
+│  Size: 16px circle                                    │
+│  BG: Success Green                                    │
+│  Icon: White checkmark                                │
+│                                                      │
+│  ⭐ Plus 회원                                         │
+│  Size: 16×16px rounded rect                          │
+│  BG: Gradient (Coral → Amber)                        │
+│  Text: "P" White 10px Bold                           │
+│                                                      │
+│  🎁 초대 리워드 활성                                   │
+│  Size: 16×16px                                       │
+│  BG: Amber Light                                     │
+│  Icon: Gift 10px, Amber Glow                         │
+│                                                      │
+└──────────────────────────────────────────────────────┘
+CHAPTER 6. 아이콘 시스템 (Iconography)
+Copy┌──────────────────────────────────────────────────────┐
+│              ICON SYSTEM                              │
+│──────────────────────────────────────────────────────│
+│                                                      │
+│  스타일: Hyper-minimal Line Icons                     │
+│  ├─ 2026년 트렌드: 초박 스트로크 + 기하학적 정밀       │
+│  ├─ Stroke: 1.5px (24px 기준)                        │
+│  ├─ Corner: Round cap, Round join                    │
+│  ├─ Grid: 24×24px (기본), 20×20px (소), 28×28px (대) │
+│  └─ Safe area: 2px padding inside grid               │
+│                                                      │
+│  추천 아이콘 라이브러리:                               │
+│  ├─ 1순위: Phosphor Icons (https://phosphoricons.com)│
+│  │   → Light 스타일, 라운드하고 따뜻한 느낌             │
+│  │   → Figma 플러그인 제공, React Native 지원          │
+│  └─ 2순위: Lucide Icons (https://lucide.dev)          │
+│      → Feather Icons 후속, 커뮤니티 활발               │
+│                                                      │
+│  컬러 규칙:                                           │
+│  ├─ Default: #4A4A68 (Dark Gray)                     │
+│  ├─ Active/Selected: #FF6B52 (Primary Coral)         │
+│  ├─ Disabled: #C8C8DA                                │
+│  └─ On Dark BG: #FFFFFF                              │
+│                                                      │
+│  앱 필수 아이콘 목록:                                  │
+│  ├─ Navigation: map, plus-circle, chat, user          │
+│  ├─ Activity: coffee, utensils, beer, walk, palette,  │
+│  │            dice, clock, map-pin, users             │
+│  ├─ Action: send, share, copy, search, filter,       │
+│  │          heart, x, check, arrow-left, chevron     │
+│  ├─ Safety: shield-check, alert-triangle, phone,     │
+│  │          map-pin-line, flag                        │
+│  ├─ Profile: camera, star, edit, settings, logout    │
+│  ├─ Referral: gift, link, user-plus, trophy          │
+│  └─ Status: check-circle, x-circle, clock, eye      │
+│                                                      │
+│  📌 Figma 구현:                                       │
+│  ├─ Phosphor Icons Figma Plugin 설치                  │
+│  ├─ 사용할 아이콘만 뽑아서 "Icons" 페이지에 정리        │
+│  ├─ 각 아이콘을 Component로 등록                       │
+│  └─ Property: Size (20/24/28), Color (token 연결)    │
+│                                                      │
+└──────────────────────────────────────────────────────┘
+CHAPTER 7. 모션 & 인터랙션 가이드 (Motion Guide)
+Copy┌──────────────────────────────────────────────────────┐
+│              MOTION & INTERACTION GUIDE               │
+│──────────────────────────────────────────────────────│
+│                                                      │
+│  ── 기본 원칙 ──                                      │
+│  "편안하게, 빠르게, 의미 있게"                          │
+│  ├─ 모든 전환은 목적이 있어야 함 (장식적 모션 금지)     │
+│  ├─ 빠른 반응: 최대 300ms 이내                        │
+│  └─ Easing: ease-out (자연스러운 감속)                 │
+│                                                      │
+│  ── 전환 애니메이션 ──                                 │
+│                                                      │
+│  화면 전환 (push):                                    │
+│  ├─ Duration: 250ms                                  │
+│  ├─ Easing: ease-out                                 │
+│  └─ 새 화면이 오른쪽에서 슬라이드 인                    │
+│                                                      │
+│  모달 / 바텀시트:                                     │
+│  ├─ Duration: 300ms                                  │
+│  ├─ Easing: spring(damping: 0.85)                    │
+│  └─ 아래에서 위로 슬라이드 + 배경 dimming               │
+│                                                      │
+│  카드 출현 (리스트):                                   │
+│  ├─ Duration: 200ms (stagger: 50ms per item)         │
+│  ├─ Easing: ease-out                                 │
+│  └─ fade-in + 아래에서 위로 8px 이동                   │
+│                                                      │
+│  ── 마이크로 인터랙션 ──                               │
+│                                                      │
+│  버튼 탭:                                             │
+│  ├─ Scale: 1.0 → 0.96 → 1.0                         │
+│  ├─ Duration: 100ms                                  │
+│  └─ 촉감 피드백 (햅틱): light impact                   │
+│                                                      │
+│  매칭 성공:                                           │
+│  ├─ 화면 전체 confetti 파티클 (1.5초)                  │
+│  ├─ 카드 scale: 0.8 → 1.0 (bounce)                   │
+│  ├─ Duration: 600ms                                  │
+│  └─ 햅틱: success notification                       │
+│                                                      │
+│  타이머 경고 (5분 이하):                               │
+│  ├─ 타이머 텍스트 pulse                               │
+│  ├─ Scale: 1.0 → 1.05 → 1.0 (반복)                   │
+│  ├─ Duration: 1000ms (loop)                          │
+│  └─ 색상: Dark Gray → Warning Yellow 전환             │
+│                                                      │
+│  초대 진행도 업데이트:                                 │
+│  ├─ 프로그래스 바 fill 애니메이션                       │
+│  ├─ 아이콘 ⬜ → ✅ 전환 (scale bounce)                 │
+│  ├─ Duration: 400ms                                  │
+│  └─ 3명 달성 시: 전체 카드 glow + confetti             │
+│                                                      │
+│  만남 확정:                                           │
+│  ├─ 체크마크 draw 애니메이션 (stroke 그려지는 효과)     │
+│  ├─ Duration: 500ms                                  │
+│  └─ 햅틱: success notification                       │
+│                                                      │
+│  📌 Figma 프로토타이핑:                                │
+│  ├─ Smart Animate로 주요 전환 구현                     │
+│  ├─ After Delay로 타이머 시뮬레이션                     │
+│  └─ 실제 구현은 React Native Reanimated 3 사용         │
+│                                                      │
+└──────────────────────────────────────────────────────┘
+CHAPTER 8. Figma 파일 구조 (File Organization)
+Copy┌──────────────────────────────────────────────────────┐
+│              FIGMA FILE STRUCTURE                     │
+│──────────────────────────────────────────────────────│
+│                                                      │
+│  📁 HANJAN Design System (메인 파일)                   │
+│  │                                                   │
+│  ├─ 📄 Page: 🎨 Cover                               │
+│  │   └─ 프로젝트 표지, 버전, 최종 수정일                │
+│  │                                                   │
+│  ├─ 📄 Page: 📐 Foundation                           │
+│  │   ├─ Section: Colors (전체 팔레트 + 다크모드)        │
+│  │   ├─ Section: Typography (타입 스케일 샘플)          │
+│  │   ├─ Section: Spacing (토큰 시각화)                 │
+│  │   ├─ Section: Grid (레이아웃 그리드 예시)            │
+│  │   ├─ Section: Shadows (엘리베이션 레벨)              │
+│  │   └─ Section: Radius (라운드 규칙)                  │
+│  │                                                   │
+│  ├─ 📄 Page: 🧩 Components                           │
+│  │   ├─ Section: Buttons (전 타입, 전 상태)            │
+│  │   ├─ Section: Cards (Activity, Match, Referral)   │
+│  │   ├─ Section: Inputs (Text, Chat, Search)         │
+│  │   ├─ Section: Navigation (Bottom Nav, Top Bar)    │
+│  │   ├─ Section: Timer                               │
+│  │   ├─ Section: Badges & Tags                       │
+│  │   ├─ Section: Modals & Bottom Sheets              │
+│  │   ├─ Section: Alerts & Toast                      │
+│  │   └─ Section: Empty States                        │
+│  │                                                   │
+│  ├─ 📄 Page: 🔣 Icons                               │
+│  │   └─ 사용 아이콘 전체 목록 (Phosphor 기반)           │
+│  │                                                   │
+│  └─ 📄 Page: 🎬 Motion Guide                         │
+│      └─ 주요 인터랙션 프로토타입 프리뷰                  │
+│                                                      │
+│  📁 HANJAN App Screens (화면 디자인 파일)               │
+│  │                                                   │
+│  ├─ 📄 Page: 🚀 Onboarding                          │
+│  │   └─ 스플래시 → 가입 → 인증 → 셀피 → 정보 → 완료   │
+│  │                                                   │
+│  ├─ 📄 Page: 🗺️ Home (Activity Map)                  │
+│  │   └─ 지도뷰 + 리스트뷰 + 빈 상태                    │
+│  │                                                   │
+│  ├─ 📄 Page: ➕ Create Activity                      │
+│  │   └─ 활동 생성 전체 플로우                          │
+│  │                                                   │
+│  ├─ 📄 Page: 🤝 Matching                             │
+│  │   └─ 매칭 알림 → 수락/거절 → 타이머 채팅             │
+│  │                                                   │
+│  ├─ 📄 Page: 💬 Chat                                 │
+│  │   └─ 타이머 채팅 → 장소 공유 → 만남 확정             │
+│  │                                                   │
+│  ├─ 📄 Page: ⭐ Review                               │
+│  │   └─ 만남 후 평가 → 연락처 교환                     │
+│  │                                                   │
+│  ├─ 📄 Page: 👤 Profile                              │
+│  │   └─ 내 프로필 + 설정 + 리워드 상태                  │
+│  │                                                   │
+│  ├─ 📄 Page: 🎁 Referral                             │
+│  │   └─ 초대 허브 → 진행도 → 달성 축하 → 만료 알림     │
+│  │                                                   │
+│  ├─ 📄 Page: 🛡️ Safety                              │
+│  │   └─ 안심 만남 설정 → 비상 버튼 → 신고               │
+│  │                                                   │
+│  ├─ 📄 Page: 💳 Subscription                         │
+│  │   └─ Plus 소개 → 구독 플로우 → 인앱 구매             │
+│  │                                                   │
+│  └─ 📄 Page: 🔄 Prototype Flow                       │
+│      └─ 전체 화면 연결된 인터랙티브 프로토타입           │
+│                                                      │
+└──────────────────────────────────────────────────────┘
+CHAPTER 9. 엘리베이션 & 라운드 시스템
+Copy┌──────────────────────────────────────────────────────┐
+│              ELEVATION & RADIUS SYSTEM                │
+│──────────────────────────────────────────────────────│
+│                                                      │
+│  ── Shadow (Elevation) Tokens ──                     │
+│                                                      │
+│  Level 0: none                                       │
+│  → 배경과 같은 레벨 (구분선으로 분리)                   │
+│                                                      │
+│  Level 1: 0px 1px 3px rgba(26,26,46,0.04)            │
+│  → 미세한 분리 (리스트 아이템)                         │
+│                                                      │
+│  Level 2: 0px 2px 12px rgba(26,26,46,0.06)           │
+│  → 기본 카드 (활동 카드, 프로필 카드)                   │
+│                                                      │
+│  Level 3: 0px 4px 20px rgba(26,26,46,0.10)           │
+│  → 강조 카드 (매칭 알림, 모달)                         │
+│                                                      │
+│  Level 4: 0px 8px 32px rgba(26,26,46,0.15)           │
+│  → 오버레이 (바텀시트, 풀스크린 모달)                   │
+│                                                      │
+│  Special: 0px 4px 20px rgba(255,107,82,0.15)         │
+│  → Coral Glow (매칭 성공 등 특별한 순간)               │
+│                                                      │
+│  ── Border Radius Tokens ──                          │
+│                                                      │
+│  radius-sm:  8px   → 작은 태그, 뱃지                  │
+│  radius-md:  12px  → 입력 필드, 작은 카드              │
+│  radius-lg:  16px  → 기본 카드                        │
+│  radius-xl:  20px  → 강조 카드, 모달                   │
+│  radius-2xl: 24px  → 바텀시트 상단                    │
+│  radius-full: 9999px → 원형 (아바타, pill 버튼)        │
+│                                                      │
+│  📌 Figma Variables로 전부 등록                        │
+│  → 컴포넌트에서 직접 토큰 참조                         │
+│                                                      │
+└──────────────────────────────────────────────────────┘
+CHAPTER 10. 반응형 & 접근성 (Responsive & Accessibility)
+Copy┌──────────────────────────────────────────────────────┐
+│          RESPONSIVE & ACCESSIBILITY GUIDE             │
+│──────────────────────────────────────────────────────│
+│                                                      │
+│  ── 지원 디바이스 ──                                   │
+│                                                      │
+│  Primary:   iPhone 15 (393×852)                      │
+│  Secondary: iPhone SE3 (375×667) → 최소 지원 크기     │
+│  Secondary: iPhone 15 Pro Max (430×932)              │
+│  Android:   Pixel 8 (412×915)                        │
+│                                                      │
+│  설계 원칙:                                           │
+│  ├─ 393px 기준으로 디자인                              │
+│  ├─ 375px에서 깨지지 않는지 반드시 확인                 │
+│  ├─ 430px에서 과도한 여백이 없는지 확인                 │
+│  └─ Auto Layout으로 모든 컴포넌트 구성 (필수!)         │
+│                                                      │
+│  ── 접근성 체크리스트 ──                               │
+│                                                      │
+│  컬러 대비:                                           │
+│  ├─ 텍스트: 최소 4.5:1 (WCAG AA)                     │
+│  │   ├─ Charcoal on Warm White: 14.2:1 ✅            │
+│  │   ├─ Dark Gray on Warm White: 7.1:1 ✅            │
+│  │   ├─ Medium Gray on Warm White: 3.5:1 ⚠️         │
+│  │   │   → Medium Gray는 큰 텍스트(18px+)에만 사용   │
+│  │   └─ White on Coral: 4.6:1 ✅                     │
+│  ├─ 아이콘: 최소 3:1                                  │
+│  └─ 비활성 상태: 대비 예외 허용                        │
+│                                                      │
+│  터치 타겟:                                           │
+│  ├─ 최소: 44×44px (Apple HIG)                        │
+│  ├─ 권장: 48×48px (Material Design)                  │
+│  └─ 인접 타겟 간격: 최소 8px                           │
+│                                                      │
+│  텍스트 크기:                                         │
+│  ├─ 최소 본문: 14px (Body-S)                          │
+│  ├─ Dynamic Type 지원 고려 (iOS)                     │
+│  └─ 11px 이하 텍스트 금지 (Overline 11px가 최소)       │
+│                                                      │
+│  스크린 리더:                                         │
+│  ├─ 모든 이미지에 accessibility label                 │
+│  ├─ 아이콘 버튼에 label 필수                           │
+│  ├─ 타이머: 남은 시간 실시간 announce                  │
+│  └─ 매칭 알림: VoiceOver priority announcement        │
+│                                                      │
+│  📌 Figma 플러그인 추천:                               │
+│  ├─ "Stark" → 대비 검사 + 접근성 체크                  │
+│  ├─ "A11y - Color Contrast Checker"                  │
+│  └─ "Able - Friction Free Accessibility"             │
+│                                                      │
+└──────────────────────────────────────────────────────┘
+CHAPTER 11. 디자인 시작 체크리스트
+크리스로님이 Figma를 열고 바로 작업 시작할 수 있는 순서입니다:
+
+Copy┌──────────────────────────────────────────────────────┐
+│          FIGMA 작업 시작 체크리스트                     │
+│──────────────────────────────────────────────────────│
+│                                                      │
+│  Day 1: 기초 세팅                                     │
+│  □ 새 Figma 프로젝트 "HANJAN" 생성                    │
+│  □ 파일 2개 생성: "Design System" + "App Screens"     │
+│  □ Pretendard Variable 폰트 설치/활성화               │
+│  □ Phosphor Icons 플러그인 설치                       │
+│  □ Stark 접근성 플러그인 설치                          │
+│                                                      │
+│  Day 2: Variables & Tokens                           │
+│  □ Color Variables 등록 (Light + Dark mode)           │
+│  □ Spacing Variables 등록 (2xs~6xl)                   │
+│  □ Radius Variables 등록 (sm~full)                    │
+│  □ Shadow 이펙트 스타일 등록 (Level 0~4)               │
+│  □ Text Styles 11종 등록                              │
+│                                                      │
+│  Day 3~4: Core Components                            │
+│  □ Button 컴포넌트 세트 (5 types × 4 states)          │
+│  □ Input Field 컴포넌트 (5 states)                    │
+│  □ Bottom Navigation 컴포넌트                         │
+│  □ Top Bar 컴포넌트                                   │
+│  □ 아이콘 컴포넌트 정리                               │
+│                                                      │
+│  Day 5~6: Feature Components                         │
+│  □ Activity Card 컴포넌트 (6 categories)              │
+│  □ Match Notification Card                           │
+│  □ Timer 컴포넌트 (3 states)                          │
+│  □ Referral Progress Card                            │
+│  □ Review Rating 컴포넌트                             │
+│  □ Meeting Confirmed Card                            │
+│  □ Badge & Tag 컴포넌트                               │
+│                                                      │
+│  Day 7~10: Screen Design                             │
+│  □ Onboarding 8개 화면                               │
+│  □ Home (지도뷰 + 리스트뷰)                           │
+│  □ Create Activity                                   │
+│  □ Matching + Chat                                   │
+│  □ Review                                            │
+│  □ Profile + Referral                                │
+│  □ Subscription                                      │
+│  □ Safety                                            │
+│                                                      │
+│  Day 11~12: Prototyping                              │
+│  □ 핵심 플로우 프로토타입 연결                          │
+│  □ 메인 플로우: Home → Create → Match → Chat →        │
+│    Confirm → Review                                  │
+│  □ 초대 플로우: Profile → Referral → Share → 달성      │
+│  □ 구독 플로우: 횟수소진 → Plus안내 → 결제             │
+│                                                      │
+│  Day 13~14: Review & Handoff                         │
+│  □ 모든 화면 375px에서 깨지지 않는지 확인              │
+│  □ 접근성 대비 체크 (Stark)                           │
+│  □ 개발자 핸드오프 준비 (Figma Dev Mode 활성화)        │
+│  □ 디자인 가이드 문서 정리                             │
+│                                                      │
+│  ⏰ 총 예상 소요: 약 14일 (2주)                        │
+│  (전담 디자이너 1명 기준)                              │
+│                                                      │
+└──────────────────────────────────────────────────────┘
+CHAPTER 12. 개발 핸드오프 규칙
+Copy┌──────────────────────────────────────────────────────┐
+│          DEVELOPER HANDOFF RULES                     │
+│──────────────────────────────────────────────────────│
+│                                                      │
+│  Figma Dev Mode 활성화 후:                            │
+│                                                      │
+│  네이밍 컨벤션 (개발자가 바로 코드로 옮길 수 있게):     │
+│  ├─ 컬러: color-primary-coral, color-neutral-charcoal│
+│  ├─ 간격: space-sm(8), space-md(12), space-lg(16)    │
+│  ├─ 타이포: text-h1, text-body-m, text-button-l      │
+│  ├─ 라운드: radius-md(12), radius-lg(16)             │
+│  └─ 그림자: shadow-level-2, shadow-coral-glow        │
+│                                                      │
+│  컴포넌트 구조 = React Native 구조:                    │
+│  ├─ Button → <Button type="primary" size="large" />  │
+│  ├─ ActivityCard → <ActivityCard category="coffee" /> │
+│  ├─ Timer → <Timer state="warning" time="04:21" />   │
+│  └─ Input → <TextInput state="focus" label="닉네임"/> │
+│                                                      │
+│  Export 규칙:                                         │
+│  ├─ 아이콘: SVG (1x), Phosphor 라이브러리와 매핑       │
+│  ├─ 이미지: PNG @1x @2x @3x                          │
+│  ├─ 로고: SVG + PNG @3x                              │
+│  └─ 일러스트: SVG (있을 경우)                          │
+│                                                      │
+│  📌 추천 Figma 플러그인 (핸드오프용):                   │
+│  ├─ "Figma to React Native" → 스타일 코드 자동 생성   │
+│  └─ "Tokens Studio" → 디자인 토큰 JSON Export         │
+│                                                      │
+└──────────────────────────────────────────────────────┘
+최종 요약 — 한잔 디자인 DNA
+Copy┌──────────────────────────────────────────────────────┐
+│                                                      │
+│  🍷 한잔의 디자인은:                                   │
+│                                                      │
+│  ✅ 따뜻하다   → Warm White 배경 + Coral & Amber      │
+│  ✅ 깨끗하다   → Pretendard + 미니멀 라인 아이콘        │
+│  ✅ 빠르다     → 대담한 CTA + 명확한 액션 유도          │
+│  ✅ 안전하다   → 인증 뱃지 + 안심 UI가 자연스럽게 녹아듦 │
+│  ✅ 즐겁다     → 축하 모션 + 진행도 게이미피케이션       │
+│  ✅ 다르다     → 스와이프 없음 + 지도 + 타이머 = 유일    │
+│                                                      │
+│  한 줄로: "낯선 사람과의 첫 만남이                      │
+│           부담 없이 느껴지는 디자인"                    │
+│                                                      │
+└──────────────────────────────────────────────────────┘

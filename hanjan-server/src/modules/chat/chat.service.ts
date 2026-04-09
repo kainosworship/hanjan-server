@@ -1,83 +1,131 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../providers/prisma.service';
+import { VenueShareData } from './dto/venue-share.dto';
 
 @Injectable()
 export class ChatService {
-    constructor(private prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
-    async getMessages(chatRoomId: string, userId: string) {
-        const room = await this.prisma.chatRoom.findUnique({
-            where: { id: chatRoomId },
-            include: { match: true },
-        });
+  async getRooms(userId: string) {
+    return this.prisma.chatRoom.findMany({
+      where: {
+        match: { OR: [{ requesterId: userId }, { accepterId: userId }] },
+        status: 'ACTIVE',
+      },
+      include: {
+        messages: { orderBy: { createdAt: 'desc' }, take: 1 },
+        match: { include: { requester: true, accepter: true } },
+      },
+    });
+  }
 
-        if (!room || (room.match.requesterId !== userId && room.match.accepterId !== userId)) {
-            throw new NotFoundException('Chat room not found');
-        }
+  async getRoom(roomId: string) {
+    const room = await this.prisma.chatRoom.findUnique({
+      where: { id: roomId },
+      include: { match: { include: { requester: true, accepter: true } } },
+    });
+    if (!room) throw new NotFoundException('채팅방을 찾을 수 없습니다.');
+    return room;
+  }
 
-        return this.prisma.chatMessage.findMany({
-            where: { chatRoomId },
-            orderBy: { createdAt: 'asc' },
-        });
-    }
+  async getMessages(roomId: string, limit = 50) {
+    return this.prisma.chatMessage.findMany({
+      where: { chatRoomId: roomId },
+      orderBy: { createdAt: 'asc' },
+      take: limit,
+    });
+  }
 
-    async sendMessage(userId: string, roomId: string, content: string, type: 'TEXT' | 'VENUE_SHARE' | 'MEETING_PROPOSAL' = 'TEXT', metadata?: any) {
-        const room = await this.prisma.chatRoom.findUnique({
-            where: { id: roomId },
-        });
+  async saveMessage(roomId: string, senderId: string, content: string) {
+    return this.prisma.chatMessage.create({
+      data: { chatRoomId: roomId, senderId, content, messageType: 'TEXT' },
+    });
+  }
 
-        if (!room || room.status !== 'ACTIVE') {
-            throw new BadRequestException('Chat room is not active');
-        }
+  async saveVenueShare(roomId: string, senderId: string, venue: VenueShareData) {
+    return this.prisma.chatMessage.create({
+      data: {
+        chatRoomId: roomId,
+        senderId,
+        content: `장소 공유: ${venue.name}`,
+        messageType: 'VENUE_SHARE',
+        metadata: { ...venue },
+      },
+    });
+  }
 
-        if (new Date() > room.timerExpiresAt) {
-            await this.prisma.chatRoom.update({
-                where: { id: roomId },
-                data: { status: 'TIMER_EXPIRED' },
-            });
-            throw new BadRequestException('Chat timer HAS EXPIRED');
-        }
+  async proposeMeeting(roomId: string, senderId: string, scheduledAt: string, venueName?: string) {
+    return this.prisma.chatMessage.create({
+      data: {
+        chatRoomId: roomId,
+        senderId,
+        content: venueName ? `${venueName}에서 만남을 제안했습니다.` : '만남 일정을 제안했습니다.',
+        messageType: 'MEETING_PROPOSAL',
+        metadata: { scheduledAt, venueName: venueName ?? '협의된 장소' },
+      },
+    });
+  }
 
-        return this.prisma.chatMessage.create({
-            data: {
-                chatRoomId: roomId,
-                senderId: userId,
-                content,
-                messageType: type,
-                metadata,
-            },
-        });
-    }
+  async confirmMeeting(roomId: string, userId: string) {
+    const room = await this.prisma.chatRoom.findUnique({
+      where: { id: roomId },
+      include: { match: true },
+    });
+    if (!room) return null;
 
-    async confirmMeeting(userId: string, roomId: string, meetingData: any) {
-        const room = await this.prisma.chatRoom.findUnique({
-            where: { id: roomId },
-            include: { match: true },
-        });
+    const existingMeeting = await this.prisma.meeting.findUnique({
+      where: { matchId: room.matchId },
+    });
+    if (existingMeeting) return existingMeeting;
 
-        if (!room || room.status !== 'ACTIVE') {
-            throw new BadRequestException('Chat room is not active');
-        }
+    const latestProposal = await this.prisma.chatMessage.findFirst({
+      where: { chatRoomId: roomId, messageType: 'MEETING_PROPOSAL' },
+      orderBy: { createdAt: 'desc' },
+    });
 
-        // Determine meeting details
-        const meeting = await this.prisma.meeting.create({
-            data: {
-                matchId: room.matchId,
-                venueName: meetingData.venueName,
-                venueAddress: meetingData.venueAddress,
-                venueLat: meetingData.venueLat,
-                venueLng: meetingData.venueLng,
-                scheduledAt: new Date(meetingData.scheduledAt),
-                status: 'CONFIRMED',
-            },
-        });
+    const meta = latestProposal?.metadata as Record<string, unknown> | null;
+    const scheduledAt = typeof meta?.['scheduledAt'] === 'string' ? meta['scheduledAt'] : new Date().toISOString();
+    const venueName = typeof meta?.['venueName'] === 'string' ? meta['venueName'] : '협의된 장소';
 
-        // Update chat room status
-        await this.prisma.chatRoom.update({
-            where: { id: roomId },
-            data: { status: 'MEETING_CONFIRMED' },
-        });
+    const meeting = await this.prisma.meeting.create({
+      data: {
+        matchId: room.matchId,
+        venueName,
+        scheduledAt: new Date(scheduledAt),
+      },
+    });
 
-        return meeting;
-    }
+    await this.prisma.chatRoom.update({
+      where: { id: roomId },
+      data: { status: 'MEETING_CONFIRMED', closedAt: new Date() },
+    });
+
+    return meeting;
+  }
+
+  async closeRoomAsExpired(roomId: string): Promise<void> {
+    await this.prisma.chatRoom.updateMany({
+      where: { id: roomId, status: 'ACTIVE' },
+      data: { status: 'TIMER_EXPIRED', closedAt: new Date() },
+    });
+  }
+
+  async getAllRooms(userId: string) {
+    return this.prisma.chatRoom.findMany({
+      where: {
+        match: { OR: [{ requesterId: userId }, { accepterId: userId }] },
+      },
+      include: {
+        messages: { orderBy: { createdAt: 'desc' }, take: 1 },
+        match: {
+          include: {
+            requester: { select: { id: true, nickname: true, profileImageUrl: true, mannerScore: true } },
+            accepter: { select: { id: true, nickname: true, profileImageUrl: true, mannerScore: true } },
+            activity: { select: { category: true } },
+          },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
 }

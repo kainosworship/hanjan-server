@@ -1,0 +1,21 @@
+Supabase DATABASE_URL:
+postgresql://postgres:Worship2*0925@db.jmnjrbbdnvitzaediqht.supabase.co:5432/postgres
+
+Redis TCP URL:
+REDIS_URL="rediss://default:gQAAAAAAAT0mAAIncDI2ZGM2ZDdiYTNlNGE0YmM2OTQ5OWYzZWI3ZjVmNWZlNnAyODExOTA@upward-goose-81190.upstash.io:6379"
+
+FIREBASE_PROJECT:
+ "type": "service_account",
+  "project_id": "hanjan-35714",
+  "private_key_id": "73672b57c9ab7ce25a350127ec02085686f0a29e",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDZfcK3tJlucAN2\nWkpgCUczXLATeE67ja1x4SuMgGTIorPhbbYRMQcEaRZDKlg/T/gjoPCtrjSgQBsN\nXs7Fzbe5A87ug1cRl9hrHHpEi3SCU2gGpFZKUg5aeY7wRr8hjrbELQwER2IliTwi\nBCGk5kGH/w1S6gRbR0ms4qIZ1i5OG284KL3GpSZhdZgL3OGbs/1XS0nNL4ddsVwg\nHmw29jgldknZ4c8BAQXl2nFnSbQuXtGAc2TWUd/nDUi4bBBeuQAQWcJVs9YwFnGD\nUIvzGc1026sw9SKa+rSMC/3cByhC1OKpZia5v1zVx+x99KCsGoefNH663Erg8d5x\nXAhM+RMLAgMBAAECggEAQUe9JVTA5OQcNe79+ftu8py0gPOQdj0dPVw/rQlwtsQX\nR+edSWW03H8KXpicKky/hzosY4UxaJQ1SnsVh0urBI5/Exo7DR3NqMDAdkiBbQjJ\n5Yx4FhCxHDj2TWp+vfzPIO0AeVxPukKJ2Q/yZUNzkfVdM3DoY9lu5MSVsTmXZnvJ\nmyv7z+owvmY8a1lfAdzRUCGVXeaF8QJ1baODYj7DFphEl35s3NERzy3KaIcB7d0N\n1lWjIB2oIA1K3giz9/F+05PwBnghKAifafe04wy2oyhKhgzBNVxk2L0Ozc7iNofE\n/NgqNSQY8EDmNRkWn4zslyDnEd9K+PdHVIhzQfrQMQKBgQD8VhyY0ESUysbDgj7c\nf5SeJihCVmRHNJ48eR1Gjy20vJYqkgHmIUNnt9S4GE5ZX+ROaEZOyO0TwY17o+gN\nUuM1CvjfW3FYwyIHnD07tpFZEYWZBMImCrNYP6OKFgT1T4dM524WbhYHipCU83Lp\nBmOuNB94/DyNN0R6euw5qv16UwKBgQDcpiLNVwUO4Wj5FiVjRtZIUFiQBwsgNDWk\n8PovK/3NOIyvvXuRA0UgGJs8KTWm4COOTrmX26TMLSIPzJD/+sEuhpXYmZ157DWV\nFrSV+BWLXAycU2GFhbQXKntGzG24mYGRyx2sdea04K9dZbzytb2QDqZSc9p2YZ11\nF3TR/2+daQKBgQCl57QboOtGbOAsUSklblh3dp0HqKd7zZOwLO1bo+2oJEoTKTZI\naVxZCBu7AngY+RwxlQuM5zxAvgRY41ZB1FqAWHty1zt54aoxGL+F0C5WQlf1WJSR\n0H1EK2tJ8dpGs4hAvvS5mJ2xTaBr3niRz1qggbKjqCvjqQ/D+6fu7oaD8wKBgAC4\nciilfhi8V7Fohxq54n099ewSedDTGtG9D7QTurJu2tbAEaU5k4I1Ulxx7gDrfnI6\ng5ShXPpls1TF4DtVwEe8nMSmS8NYKByihFhxBPD9jfT8uLbM5vekZd6nUDxoE+o7\n9Y7Ym7Y/fZMaf/Fy8nmD8rsWMcJtMyxstS7yXJTxAoGBAKZVFschIf1r8wRVjWWb\n4oFIOUL63HnqaT/tfb7JZecuvBLJH6OQsmfd4pG0nDdfD8tLRsWuLn23722bWy6E\njMTrHc8bNA5zntSqVqVn3W+Ogq+ORAffXqdf0YCLJ7wBfXKju7ECWZv6IhlshN9u\nXL8vyp0HeeSSUECcY6Ckxvar\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fbsvc@hanjan-35714.iam.gserviceaccount.com",
+  "client_id": "116388216391725408075",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40hanjan-35714.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+
+
+

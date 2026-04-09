@@ -1,96 +1,56 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../providers/prisma.service';
+import { CreateReviewDto } from './dto/create-review.dto';
 
 @Injectable()
 export class ReviewsService {
-    constructor(private prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
-    async submitReview(userId: string, data: any) {
-        const { meetingId, conversationScore, punctualityScore, remeetScore, comment } = data;
+  async create(reviewerId: string, dto: CreateReviewDto) {
+    const review = await this.prisma.review.create({
+      data: {
+        meetingId: dto.meetingId,
+        reviewerId,
+        reviewedUserId: dto.reviewedUserId,
+        conversationScore: dto.conversationScore,
+        punctualityScore: dto.punctualityScore,
+        remeetScore: dto.remeetScore,
+        tags: dto.tags || [],
+        comment: dto.comment,
+      },
+    });
 
-        const meeting = await this.prisma.meeting.findUnique({
-            where: { id: meetingId },
-            include: { match: true },
-        });
+    await this.recalculateMannerScore(dto.reviewedUserId);
+    return review;
+  }
 
-        if (!meeting) throw new BadRequestException('Meeting not found');
+  async getByMeeting(meetingId: string) {
+    return this.prisma.review.findMany({ where: { meetingId } });
+  }
 
-        // Determine who is being reviewed
-        const reviewedUserId =
-            meeting.match.requesterId === userId
-                ? meeting.match.accepterId
-                : meeting.match.requesterId;
+  async checkCompleted(userId: string, meetingId: string) {
+    const review = await this.prisma.review.findFirst({
+      where: { meetingId, reviewerId: userId },
+    });
+    return { completed: !!review };
+  }
 
-        const review = await this.prisma.review.create({
-            data: {
-                meetingId,
-                reviewerId: userId,
-                reviewedUserId,
-                conversationScore,
-                punctualityScore,
-                remeetScore,
-                comment,
-            },
-        });
+  private async recalculateMannerScore(userId: string) {
+    const reviews = await this.prisma.review.findMany({ where: { reviewedUserId: userId } });
+    if (!reviews.length) return;
 
-        // Update the reviewed user's MannerScore
-        await this.updateMannerScore(reviewedUserId);
+    const avg = (key: keyof typeof reviews[0]) =>
+      reviews.reduce((s, r) => s + (r[key] as number), 0) / reviews.length;
 
-        return review;
-    }
+    const conversationAvg = avg('conversationScore');
+    const punctualityAvg = avg('punctualityScore');
+    const remeetAvg = avg('remeetScore');
+    const overallScore = (conversationAvg + punctualityAvg + remeetAvg) / 3;
 
-    async updateMannerScore(userId: string) {
-        const reviews = await this.prisma.review.findMany({
-            where: { reviewedUserId: userId },
-        });
-
-        if (reviews.length === 0) return;
-
-        const total = reviews.length;
-        const convAvg = reviews.reduce((sum: number, r: any) => sum + (r.conversationScore || 0), 0) / total;
-        const puncAvg = reviews.reduce((sum: number, r: any) => sum + (r.punctualityScore || 0), 0) / total;
-        const remeetAvg = reviews.reduce((sum: number, r: any) => sum + (r.remeetScore || 0), 0) / total;
-
-        const overall = (convAvg + puncAvg + remeetAvg) / 3;
-
-        await this.prisma.mannerScore.upsert({
-            where: { userId },
-            update: {
-                conversationAvg: convAvg,
-                punctualityAvg: puncAvg,
-                remeetAvg: remeetAvg,
-                overallScore: overall,
-                totalReviews: total,
-            },
-            create: {
-                userId,
-                conversationAvg: convAvg,
-                punctualityAvg: puncAvg,
-                remeetAvg: remeetAvg,
-                overallScore: overall,
-                totalReviews: total,
-            },
-        });
-    }
-
-    async getUserMannerProfile(userId: string) {
-        const score = await this.prisma.mannerScore.findUnique({
-            where: { userId },
-        });
-
-        const reviews = await this.prisma.review.findMany({
-            where: { reviewedUserId: userId },
-            take: 5,
-            orderBy: { createdAt: 'desc' },
-            select: {
-                comment: true,
-                createdAt: true,
-            },
-        });
-
-        return {
-            score,
-            recentComments: reviews,
-        };
-    }
+    await this.prisma.mannerScore.upsert({
+      where: { userId },
+      create: { userId, conversationAvg, punctualityAvg, remeetAvg, overallScore, totalReviews: reviews.length },
+      update: { conversationAvg, punctualityAvg, remeetAvg, overallScore, totalReviews: reviews.length },
+    });
+  }
 }

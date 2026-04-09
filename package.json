@@ -1,21 +1,24 @@
 {
-    "name": "hanjan",
-    "version": "1.0.0",
-    "private": true,
-    "workspaces": [
-        "hanjan-app",
-        "hanjan-server",
-        "hanjan-shared"
-    ],
-    "scripts": {
-        "app:start": "cd hanjan-app && npx expo start",
-        "app:ios": "cd hanjan-app && npx expo run:ios",
-        "app:android": "cd hanjan-app && npx expo run:android",
-        "server:dev": "cd hanjan-server && npm run start:dev",
-        "server:build": "cd hanjan-server && npm run build",
-        "db:migrate": "cd hanjan-server && npx prisma migrate dev",
-        "db:seed": "cd hanjan-server && npx prisma db seed",
-        "docker:up": "docker-compose up -d",
-        "docker:down": "docker-compose down"
-    }
+  "name": "hanjan",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "hanjan-app",
+    "hanjan-server",
+    "hanjan-shared"
+  ],
+  "scripts": {
+    "app:start": "cd hanjan-app && npx expo start",
+    "app:ios": "cd hanjan-app && npx expo run:ios",
+    "app:android": "cd hanjan-app && npx expo run:android",
+    "build:android": "cd hanjan-app && eas build --platform android --profile production",
+    "build:android:apk": "cd hanjan-app && eas build --platform android --profile apk-direct",
+    "build:ios": "cd hanjan-app && eas build --platform ios --profile production",
+    "server:dev": "cd hanjan-server && npm run start:dev",
+    "server:build": "cd hanjan-server && npm run build",
+    "db:migrate": "cd hanjan-server && npx prisma migrate dev",
+    "db:seed": "cd hanjan-server && npx prisma db seed",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down"
+  }
 }

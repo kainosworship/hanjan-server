@@ -1,6 +1,6 @@
 export const REFERRAL_CONSTANTS = {
-    REQUIRED_FRIENDS: 3,
-    REWARD_DAYS: 30,
-    MIN_DAYS_BEFORE_REVOKE: 7,
-    MAX_ACCUMULATED_MONTHS: undefined, // 무제한
-};
+  REQUIRED_FRIENDS: 3,
+  REWARD_DAYS: 30,
+  MIN_DAYS_BEFORE_REVOKE: 7,
+  MAX_ACCUMULATED_MONTHS: undefined as number | undefined,
+} as const;

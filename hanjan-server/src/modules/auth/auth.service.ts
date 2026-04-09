@@ -1,84 +1,82 @@
 import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
+import { Gender } from '@prisma/client';
 import { PrismaService } from '../../providers/prisma.service';
-import { nanoid } from 'nanoid';
-import * as bcrypt from 'bcryptjs';
+import { RedisService } from '../../providers/redis.service';
+import { RegisterDto } from './dto/register.dto';
 
 @Injectable()
 export class AuthService {
-    constructor(
-        private prisma: PrismaService,
-        private jwtService: JwtService,
-        private configService: ConfigService,
-    ) { }
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly redis: RedisService,
+    private readonly jwtService: JwtService,
+  ) {}
 
-    async sendOtp(phone: String) {
-        const otp = Math.floor(100000 + Math.random() * 900000).toString();
-        const expiry = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
-
-        // In production, send via Aligo/SMS provider
-        // For now, we'll log it or store in Redis
-        console.log(`[OTP] ${phone}: ${otp}`);
-
-        // Clean up old OTPs for this phone
-        await this.prisma.$executeRaw`
-      DELETE FROM "ChatMessage" WHERE "content" = ${phone} AND "messageType" = 'SYSTEM'
-    `;
-
-        // We'll use a temporary approach or Redis for OTP storage
-        // For MVP, let's assume valid for now if fixed OTP '123456' or similar
-        return { success: true, message: 'OTP sent' };
+  async sendOtp(phone: string): Promise<{ message: string }> {
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    await this.redis.set(`otp:${phone}`, otp, 300);
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`[DEV] OTP sent for phone ending in ...${phone.slice(-4)}`);
     }
+    return { message: 'OTP 전송 완료' };
+  }
 
-    async verifyOtpAndLogin(phone: string, otp: string) {
-        // Dummy verification for now
-        if (otp !== '123456') {
-            throw new UnauthorizedException('Invalid OTP');
-        }
-
-        let user = await this.prisma.user.findUnique({
-            where: { phone },
-        });
-
-        const isNewUser = !user;
-
-        if (!user) {
-            // Create partial user for onboarding
-            user = await this.prisma.user.create({
-                data: {
-                    phone,
-                    nickname: `User_${nanoid(5)}`,
-                    birthDate: new Date('1995-01-01'), // Default, to be updated in onboarding
-                    gender: 'other',
-                    isPhoneVerified: true,
-                },
-            });
-
-            // Create referral code for new user
-            await this.prisma.referralCode.create({
-                data: {
-                    userId: user.id,
-                    code: `HJ-${nanoid(8).toUpperCase()}`,
-                },
-            });
-        }
-
-        const payload = { sub: user.id, phone: user.phone };
-        return {
-            accessToken: this.jwtService.sign(payload),
-            refreshToken: this.jwtService.sign(payload, {
-                secret: this.configService.get('JWT_REFRESH_SECRET'),
-                expiresIn: '7d',
-            }),
-            user,
-            isNewUser,
-        };
+  async verifyOtp(phone: string, code: string): Promise<{ verified: boolean; token: string }> {
+    const stored = await this.redis.getVal(`otp:${phone}`);
+    if (!stored || stored !== code) {
+      throw new UnauthorizedException('잘못된 인증 코드입니다.');
     }
+    await this.redis.del(`otp:${phone}`);
+    const token = this.jwtService.sign({ phone, type: 'phone_verified' }, { expiresIn: 600 });
+    return { verified: true, token };
+  }
 
-    async validateUser(userId: string) {
-        return this.prisma.user.findUnique({
-            where: { id: userId },
-        });
+  async register(dto: RegisterDto) {
+    const existing = await this.prisma.user.findUnique({ where: { phone: dto.phone } });
+    if (existing) throw new BadRequestException('이미 가입된 전화번호입니다.');
+
+    const user = await this.prisma.user.create({
+      data: {
+        phone: dto.phone,
+        nickname: dto.nickname,
+        birthDate: new Date(dto.birthDate),
+        gender: dto.gender as Gender,
+        isPhoneVerified: true,
+      },
+    });
+
+    return this.generateTokens(user.id);
+  }
+
+  async login(phone: string) {
+    const user = await this.prisma.user.findUnique({ where: { phone } });
+    if (!user || !user.isPhoneVerified) {
+      throw new UnauthorizedException('가입된 계정을 찾을 수 없습니다.');
     }
+    return this.generateTokens(user.id);
+  }
+
+  async refreshTokens(userId: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user) throw new UnauthorizedException();
+    return this.generateTokens(userId);
+  }
+
+  async logout(userId: string): Promise<{ message: string }> {
+    await this.redis.del(`refresh:${userId}`);
+    return { message: '로그아웃 완료' };
+  }
+
+  private async generateTokens(userId: string) {
+    const payload = { sub: userId };
+    const accessToken = this.jwtService.sign(payload);
+    const refreshRefreshDays = parseInt(process.env.JWT_REFRESH_EXPIRES_DAYS ?? '7', 10);
+    const refreshToken = this.jwtService.sign(payload, {
+      secret: process.env.JWT_REFRESH_SECRET,
+      expiresIn: refreshRefreshDays * 24 * 60 * 60,
+    });
+    await this.redis.set(`refresh:${userId}`, refreshToken, 7 * 24 * 60 * 60);
+    return { accessToken, refreshToken };
+  }
 }

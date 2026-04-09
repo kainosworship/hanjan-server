@@ -1,73 +1,30 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { ReportReason } from '@prisma/client';
 import { PrismaService } from '../../providers/prisma.service';
-import { ReportReason, ReportStatus } from '@prisma/client';
+import { CreateReportDto } from './dto/create-report.dto';
+import { EmergencyLocationDto } from './dto/emergency.dto';
 
 @Injectable()
 export class SafetyService {
-    constructor(private prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
-    async createReport(reporterId: string, data: {
-        reportedUserId: string;
-        reason: ReportReason;
-        description?: string;
-    }) {
-        if (reporterId === data.reportedUserId) {
-            throw new BadRequestException('Cannot report yourself');
-        }
+  async createReport(reporterId: string, dto: CreateReportDto) {
+    return this.prisma.report.create({
+      data: {
+        reporterId,
+        reportedUserId: dto.reportedUserId,
+        reason: dto.reason as ReportReason,
+        description: dto.description,
+      },
+    });
+  }
 
-        const reportedUser = await this.prisma.user.findUnique({
-            where: { id: data.reportedUserId },
-        });
+  async sendEmergency(userId: string, location: EmergencyLocationDto | undefined) {
+    console.log(`[EMERGENCY] User ${userId} sent emergency alert at`, location?.lat, location?.lng);
+    return { sent: true };
+  }
 
-        if (!reportedUser) throw new NotFoundException('Reported user not found');
-
-        return this.prisma.report.create({
-            data: {
-                reporterId,
-                reportedUserId: data.reportedUserId,
-                reason: data.reason,
-                description: data.description,
-                status: ReportStatus.PENDING,
-            },
-        });
-    }
-
-    async verifyId(userId: string) {
-        // In a real app, this would integrate with an ID verification API
-        // Here we mark it as verified for the flow
-        return this.prisma.user.update({
-            where: { id: userId },
-            data: {
-                isIdVerified: true,
-            },
-        });
-    }
-
-    async handleSelfieVerification(userId: string, imageUrl: string) {
-        return this.prisma.user.update({
-            where: { id: userId },
-            data: {
-                profileImageUrl: imageUrl,
-                isSelfieVerified: true,
-                selfieUpdatedAt: new Date(),
-            },
-        });
-    }
-
-    async blockUser(userId: string) {
-        return this.prisma.user.update({
-            where: { id: userId },
-            data: {
-                isActive: false,
-                isBanned: true,
-            },
-        });
-    }
-
-    async getReportStatus(reporterId: string) {
-        return this.prisma.report.findMany({
-            where: { reporterId },
-            orderBy: { createdAt: 'desc' },
-        });
-    }
+  async updateLocationShare(userId: string, enabled: boolean) {
+    return { userId, locationShareEnabled: enabled };
+  }
 }

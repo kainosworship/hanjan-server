@@ -1,70 +1,32 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../providers/prisma.service';
-import { SubscriptionPlan, SubscriptionStatus, PurchaseType } from '@prisma/client';
+import { RevenueCatWebhookPayload } from './dto/webhook.dto';
 
 @Injectable()
 export class SubscriptionsService {
-    constructor(private prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
-    async getStatus(userId: string) {
-        const subscription = await this.prisma.subscription.findUnique({
-            where: { userId },
-        });
+  async getStatus(userId: string) {
+    return this.prisma.subscription.findUnique({ where: { userId } });
+  }
 
-        if (!subscription) {
-            return { isActive: false, plan: null };
-        }
+  async getPlusAccess(userId: string) {
+    const subscription = await this.prisma.subscription.findUnique({ where: { userId } });
+    const activeReward = await this.prisma.referralReward.findFirst({
+      where: { userId, isActive: true, endDate: { gt: new Date() } },
+    });
 
-        const isActive = subscription.status === SubscriptionStatus.ACTIVE &&
-            subscription.currentPeriodEnd > new Date();
-
-        return {
-            isActive,
-            plan: subscription.plan,
-            expiryDate: subscription.currentPeriodEnd,
-        };
+    if (subscription?.status === 'ACTIVE') {
+      return { hasPlus: true, source: 'subscription', expiresAt: subscription.currentPeriodEnd };
     }
-
-    // Called when a user completes a purchase in the app and notifies the server
-    async syncSubscription(userId: string, data: {
-        plan: SubscriptionPlan;
-        revenuecatId: string;
-        expiresAt: Date;
-    }) {
-        return this.prisma.subscription.upsert({
-            where: { userId },
-            update: {
-                plan: data.plan,
-                status: SubscriptionStatus.ACTIVE,
-                revenuecatId: data.revenuecatId,
-                currentPeriodStart: new Date(),
-                currentPeriodEnd: data.expiresAt,
-            },
-            create: {
-                userId,
-                plan: data.plan,
-                status: SubscriptionStatus.ACTIVE,
-                revenuecatId: data.revenuecatId,
-                currentPeriodStart: new Date(),
-                currentPeriodEnd: data.expiresAt,
-            },
-        });
+    if (activeReward) {
+      return { hasPlus: true, source: 'referral_reward', expiresAt: activeReward.endDate };
     }
+    return { hasPlus: false, source: null };
+  }
 
-    async recordPurchase(userId: string, data: {
-        productId: string;
-        type: PurchaseType;
-        amount: number;
-        revenuecatId?: string;
-    }) {
-        return this.prisma.purchase.create({
-            data: {
-                userId,
-                productId: data.productId,
-                purchaseType: data.type,
-                amount: data.amount,
-                revenuecatId: data.revenuecatId,
-            },
-        });
-    }
+  async handleWebhook(body: RevenueCatWebhookPayload) {
+    console.log('[RevenueCat Webhook]', body.event?.type);
+    return { received: true };
+  }
 }

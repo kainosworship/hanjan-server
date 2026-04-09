@@ -1,178 +1,159 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { useRouter } from 'expo-router';
-import { Container } from '../../src/components/common/Container';
-import { Typography } from '../../src/components/common/Typography';
-import { Input } from '../../src/components/common/Input';
-import { Button } from '../../src/components/common/Button';
-import { theme } from '../../src/theme';
-import { X } from 'phosphor-react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TextInput,
+  Alert,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
+import { colors, typography, spacing, radius } from '@/theme';
+import { ActivityCategoryPicker } from '@/components/activity/ActivityCategoryPicker';
+import { ActivityTimePicker } from '@/components/activity/ActivityTimePicker';
+import { ActivityRadiusSelector } from '@/components/activity/ActivityRadiusSelector';
+import { ActivityGroupSizeSelector } from '@/components/activity/ActivityGroupSizeSelector';
+import { Button } from '@/components/ui/Button';
+import { useActivities } from '@/hooks/useActivities';
 
-const CATEGORIES = [
-    { id: 'COFFEE', label: '커피', icon: '☕', color: theme.colors.categories.coffee },
-    { id: 'MEAL', label: '식사', icon: '🍽️', color: theme.colors.categories.meal },
-    { id: 'DRINK', label: '술', icon: '🍷', color: theme.colors.categories.drink },
-    { id: 'WALK', label: '산책', icon: '🚶', color: theme.colors.categories.walk },
-    { id: 'CULTURE', label: '문화', icon: '🎨', color: theme.colors.categories.culture },
-    { id: 'ANYTHING', label: '뭐든', icon: '🎲', color: theme.colors.categories.anything },
-];
+const TIMING_TO_SCHEDULED: Record<string, () => Date> = {
+  now: () => new Date(),
+  '30min': () => new Date(Date.now() + 30 * 60 * 1000),
+  '1hour': () => new Date(Date.now() + 60 * 60 * 1000),
+  tonight: () => {
+    const d = new Date();
+    d.setHours(19, 0, 0, 0);
+    if (d < new Date()) d.setDate(d.getDate() + 1);
+    return d;
+  },
+  custom: () => new Date(Date.now() + 2 * 60 * 60 * 1000),
+};
 
-const TIMINGS = [
-    { id: 'NOW', label: '지금 즉시' },
-    { id: 'THIRTY_MIN', label: '30분 후' },
-    { id: 'ONE_HOUR', label: '1시간 후' },
-    { id: 'TONIGHT', label: '오늘 저녁' },
-];
+export default function CreateScreen() {
+  const [category, setCategory] = useState('coffee');
+  const [timing, setTiming] = useState('now');
+  const [radiusKm, setRadiusKm] = useState<1 | 2 | 5>(2);
+  const [groupSize, setGroupSize] = useState('1:1');
+  const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
 
-export default function CreateActivityScreen() {
-    const router = useRouter();
-    const [category, setCategory] = useState<string | null>(null);
-    const [timing, setTiming] = useState<string>('NOW');
-    const [radius, setRadius] = useState<number>(2);
-    const [message, setMessage] = useState('');
-    const [loading, setLoading] = useState(false);
+  const { createActivity, getDailyCount } = useActivities();
 
-    const handleCreate = async () => {
-        if (!category) return;
+  const MOCK_LAT = 37.5665;
+  const MOCK_LNG = 126.978;
 
-        setLoading(true);
-        try {
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            router.back();
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
-    };
+  const handleCreate = async () => {
+    setLoading(true);
+    try {
+      const dailyResult = await getDailyCount().catch(() => ({ count: 0, limit: 2 }));
+      if (dailyResult.count >= dailyResult.limit) {
+        Alert.alert(
+          '일일 한도 초과',
+          '무료 회원은 하루 2회까지 활동을 올릴 수 있어요.\nPlus로 업그레이드하면 무제한으로 올릴 수 있어요!',
+          [
+            { text: '확인', style: 'cancel' },
+            { text: 'Plus 알아보기', onPress: () => router.push('/subscription') },
+          ],
+        );
+        return;
+      }
 
-    return (
-        <Container useSafeArea={true}>
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => router.back()}>
-                    <X size={24} color={theme.colors.neutral.charcoal} />
-                </TouchableOpacity>
-                <Typography variant="h2">활동 만들기</Typography>
-                <View style={{ width: 24 }} />
-            </View>
+      const scheduledAt = TIMING_TO_SCHEDULED[timing]?.() ?? new Date();
+      await createActivity({
+        category,
+        timing,
+        scheduledAt: scheduledAt.toISOString(),
+        radiusKm,
+        groupSize,
+        message: message.trim() || undefined,
+        locationLat: MOCK_LAT,
+        locationLng: MOCK_LNG,
+      });
 
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
-                <Typography variant="h3" style={styles.sectionTitle}>오늘 뭐 하고 싶어요?</Typography>
-                <View style={styles.categoryGrid}>
-                    {CATEGORIES.map(cat => (
-                        <TouchableOpacity
-                            key={cat.id}
-                            style={[
-                                styles.categoryCard,
-                                category === cat.id && { backgroundColor: theme.colors.primary.light, borderColor: theme.colors.primary.coral }
-                            ]}
-                            onPress={() => setCategory(cat.id)}
-                        >
-                            <Typography variant="display">{cat.icon}</Typography>
-                            <Typography variant="caption" style={{ marginTop: 4 }}>{cat.label}</Typography>
-                        </TouchableOpacity>
-                    ))}
-                </View>
+      Alert.alert('활동 올리기 완료!', '주변 사람들이 내 활동을 볼 수 있어요 🎉', [
+        { text: '확인', onPress: () => router.replace('/(tabs)/map') },
+      ]);
+    } catch (_) {
+      Alert.alert('오류', '활동을 만드는 데 실패했습니다. 다시 시도해주세요.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-                <Typography variant="h3" style={styles.sectionTitle}>언제?</Typography>
-                <View style={styles.row}>
-                    {TIMINGS.map(t => (
-                        <TouchableOpacity
-                            key={t.id}
-                            style={[styles.chip, timing === t.id && styles.chipActive]}
-                            onPress={() => setTiming(t.id)}
-                        >
-                            <Typography variant="caption" color={timing === t.id ? 'white' : theme.colors.neutral.darkGray}>
-                                {t.label}
-                            </Typography>
-                        </TouchableOpacity>
-                    ))}
-                </View>
+  return (
+    <SafeAreaView style={styles.container} edges={['top']}>
+      <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        <View style={styles.header}>
+          <Text style={styles.title}>활동 만들기</Text>
+          <Text style={styles.subtitle}>지금 뭘 하고 싶으신가요?</Text>
+        </View>
 
-                <Typography variant="h3" style={styles.sectionTitle}>어디서? (반경)</Typography>
-                <View style={styles.row}>
-                    {[1, 2, 5].map(r => (
-                        <TouchableOpacity
-                            key={r}
-                            style={[styles.chip, radius === r && styles.chipActive]}
-                            onPress={() => setRadius(r)}
-                        >
-                            <Typography variant="caption" color={radius === r ? 'white' : theme.colors.neutral.darkGray}>
-                                {r}km
-                            </Typography>
-                        </TouchableOpacity>
-                    ))}
-                </View>
+        <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+          <ActivityCategoryPicker selected={category} onSelect={setCategory} />
+          <ActivityTimePicker selected={timing} onSelect={setTiming} />
+          <ActivityRadiusSelector selected={radiusKm} onSelect={setRadiusKm} />
+          <ActivityGroupSizeSelector selected={groupSize} onSelect={setGroupSize} />
 
-                <Typography variant="h3" style={styles.sectionTitle}>한 마디 (선택)</Typography>
-                <Input
-                    placeholder="오늘 좀 지쳤는데 수다 떨 사람 구함"
-                    value={message}
-                    onChangeText={setMessage}
-                    inputStyle={styles.memoInput}
-                />
+          <View style={styles.messageSection}>
+            <Text style={styles.sectionLabel}>한 마디 (선택)</Text>
+            <TextInput
+              style={styles.messageInput}
+              value={message}
+              onChangeText={setMessage}
+              placeholder="지금 내 상황이나 원하는 것을 간단히 써보세요"
+              placeholderTextColor={colors.neutral.mediumGray}
+              maxLength={50}
+              multiline
+            />
+            <Text style={styles.charCount}>{message.length}/50</Text>
+          </View>
+        </ScrollView>
 
-                <View style={styles.footer}>
-                    <Button
-                        title="활동 올리기 🎯"
-                        onPress={handleCreate}
-                        loading={loading}
-                        disabled={!category}
-                    />
-                </View>
-            </ScrollView>
-        </Container>
-    );
+        <View style={styles.footer}>
+          <Button label="활동 올리기 🎯" onPress={handleCreate} loading={loading} />
+        </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingVertical: theme.spacing.md,
-    },
-    scroll: {
-        paddingBottom: 40,
-    },
-    sectionTitle: {
-        marginTop: theme.spacing.lg,
-        marginBottom: theme.spacing.md,
-    },
-    categoryGrid: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        gap: theme.spacing.md,
-    },
-    categoryCard: {
-        width: '30%',
-        aspectRatio: 1,
-        backgroundColor: theme.colors.neutral.lightGray,
-        borderRadius: theme.radius.lg,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderWidth: 2,
-        borderColor: 'transparent',
-    },
-    row: {
-        flexDirection: 'row',
-        gap: theme.spacing.sm,
-    },
-    chip: {
-        paddingHorizontal: theme.spacing.md,
-        paddingVertical: theme.spacing.sm,
-        backgroundColor: theme.colors.neutral.lightGray,
-        borderRadius: theme.radius.full,
-    },
-    chipActive: {
-        backgroundColor: theme.colors.primary.coral,
-    },
-    memoInput: {
-        height: 100,
-        textAlignVertical: 'top',
-    },
-    footer: {
-        marginTop: theme.spacing.xxl,
-    },
+  container: { flex: 1, backgroundColor: colors.neutral.warmWhite },
+  flex: { flex: 1 },
+  header: {
+    paddingHorizontal: spacing['2xl'],
+    paddingTop: spacing.md,
+    paddingBottom: spacing.xl,
+    backgroundColor: colors.neutral.pureWhite,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.neutral.lightGray,
+  },
+  title: { ...typography.h1, color: colors.neutral.charcoal },
+  subtitle: { ...typography.bodyM, color: colors.neutral.mediumGray, marginTop: spacing.xs },
+  scroll: { flex: 1 },
+  scrollContent: { padding: spacing['2xl'], paddingBottom: 100 },
+  messageSection: { marginBottom: spacing['2xl'] },
+  sectionLabel: { ...typography.h3, color: colors.neutral.charcoal, marginBottom: spacing.md },
+  messageInput: {
+    backgroundColor: colors.neutral.pureWhite,
+    borderRadius: radius.xl,
+    borderWidth: 1.5,
+    borderColor: colors.neutral.lightGray,
+    padding: spacing.lg,
+    ...typography.bodyL,
+    color: colors.neutral.charcoal,
+    minHeight: 80,
+    textAlignVertical: 'top',
+  },
+  charCount: { ...typography.caption, color: colors.neutral.mediumGray, textAlign: 'right', marginTop: spacing.xs },
+  footer: {
+    padding: spacing['2xl'],
+    backgroundColor: colors.neutral.pureWhite,
+    borderTopWidth: 1,
+    borderTopColor: colors.neutral.lightGray,
+  },
 });

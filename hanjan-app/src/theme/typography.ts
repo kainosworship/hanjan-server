@@ -1,62 +1,92 @@
-export const typography = {
-    display: {
-        size: 28,
-        weight: '700',
-        lineHeight: 36,
-    },
-    h1: {
-        size: 24,
-        weight: '700',
-        lineHeight: 32,
-    },
-    h2: {
-        size: 20,
-        weight: '600',
-        lineHeight: 28,
-    },
-    h3: {
-        size: 17,
-        weight: '600',
-        lineHeight: 24,
-    },
-    bodyL: {
-        size: 16,
-        weight: '400',
-        lineHeight: 24,
-    },
-    bodyM: {
-        size: 15,
-        weight: '400',
-        lineHeight: 22,
-    },
-    bodyS: {
-        size: 14,
-        weight: '400',
-        lineHeight: 20,
-    },
-    caption: {
-        size: 12,
-        weight: '500',
-        lineHeight: 16,
-    },
-    overline: {
-        size: 11,
-        weight: '600',
-        lineHeight: 14,
-    },
-    buttonL: {
-        size: 16,
-        weight: '600',
-        lineHeight: 20,
-    },
-    buttonM: {
-        size: 14,
-        weight: '600',
-        lineHeight: 18,
-    },
-    buttonS: {
-        size: 12,
-        weight: '500',
-        lineHeight: 16,
-    },
+import { TextStyle } from 'react-native';
+
+export const fontFamily = {
+  regular: 'Pretendard-Variable',
+  medium: 'Pretendard-Variable',
+  semiBold: 'Pretendard-Variable',
+  bold: 'Pretendard-Variable',
 };
+
+export const fontWeight = {
+  regular: '400' as TextStyle['fontWeight'],
+  medium: '500' as TextStyle['fontWeight'],
+  semiBold: '600' as TextStyle['fontWeight'],
+  bold: '700' as TextStyle['fontWeight'],
+};
+
+export const typography = {
+  display: {
+    fontSize: 28,
+    fontWeight: fontWeight.bold,
+    lineHeight: 36,
+    fontFamily: fontFamily.bold,
+  },
+  h1: {
+    fontSize: 24,
+    fontWeight: fontWeight.bold,
+    lineHeight: 32,
+    fontFamily: fontFamily.bold,
+  },
+  h2: {
+    fontSize: 20,
+    fontWeight: fontWeight.semiBold,
+    lineHeight: 28,
+    fontFamily: fontFamily.semiBold,
+  },
+  h3: {
+    fontSize: 17,
+    fontWeight: fontWeight.semiBold,
+    lineHeight: 24,
+    fontFamily: fontFamily.semiBold,
+  },
+  bodyL: {
+    fontSize: 16,
+    fontWeight: fontWeight.regular,
+    lineHeight: 24,
+    fontFamily: fontFamily.regular,
+  },
+  bodyM: {
+    fontSize: 15,
+    fontWeight: fontWeight.regular,
+    lineHeight: 22,
+    fontFamily: fontFamily.regular,
+  },
+  bodyS: {
+    fontSize: 14,
+    fontWeight: fontWeight.regular,
+    lineHeight: 20,
+    fontFamily: fontFamily.regular,
+  },
+  caption: {
+    fontSize: 12,
+    fontWeight: fontWeight.medium,
+    lineHeight: 16,
+    fontFamily: fontFamily.medium,
+  },
+  overline: {
+    fontSize: 11,
+    fontWeight: fontWeight.semiBold,
+    lineHeight: 14,
+    fontFamily: fontFamily.semiBold,
+  },
+  buttonL: {
+    fontSize: 16,
+    fontWeight: fontWeight.semiBold,
+    lineHeight: 20,
+    fontFamily: fontFamily.semiBold,
+  },
+  buttonM: {
+    fontSize: 14,
+    fontWeight: fontWeight.semiBold,
+    lineHeight: 18,
+    fontFamily: fontFamily.semiBold,
+  },
+  buttonS: {
+    fontSize: 12,
+    fontWeight: fontWeight.medium,
+    lineHeight: 16,
+    fontFamily: fontFamily.medium,
+  },
+} as const;
+
+export type Typography = typeof typography;

@@ -10,7 +10,7 @@ datasource db {
 }
 
 // ============================================
-// 1. USERS — 사용자
+// 1. USERS
 // ============================================
 model User {
   id                String    @id @default(uuid())
@@ -31,25 +31,25 @@ model User {
   isBanned          Boolean   @default(false)
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
+  expoPushToken     String?
 
-  // Relations
   interests         UserInterest[]
   activities        Activity[]
-  matchesAsRequester Match[]  @relation("requester")
-  matchesAsAccepter  Match[]  @relation("accepter")
+  matchesAsRequester Match[]   @relation("requester")
+  matchesAsAccepter  Match[]   @relation("accepter")
   sentMessages      ChatMessage[]
-  reviewsGiven      Review[]  @relation("reviewer")
-  reviewsReceived   Review[]  @relation("reviewed")
+  reviewsGiven      Review[]   @relation("reviewer")
+  reviewsReceived   Review[]   @relation("reviewed")
   referralCode      ReferralCode?
   referralsGiven    Referral[] @relation("referrer")
   referralsReceived Referral[] @relation("referee")
   referralRewards   ReferralReward[]
   subscription      Subscription?
   purchases         Purchase[]
-  reportsSent       Report[]  @relation("reporter")
-  reportsReceived   Report[]  @relation("reported")
-  expoPushToken     String?
-  
+  reportsSent       Report[]   @relation("reporter")
+  reportsReceived   Report[]   @relation("reported")
+  mannerScore       MannerScore?
+
   @@index([lastLocationLat, lastLocationLng])
   @@index([isActive, isBanned])
 }
@@ -61,49 +61,51 @@ enum Gender {
 }
 
 model UserInterest {
-  id        String @id @default(uuid())
-  userId    String
-  tag       String
-  user      User   @relation(fields: [userId], references: [id])
+  id      String @id @default(uuid())
+  userId  String
+  tag     String
+  user    User   @relation(fields: [userId], references: [id])
 
   @@unique([userId, tag])
   @@index([tag])
 }
 
 // ============================================
-// 2. PROFILES — 매너 점수 집계
+// 2. PROFILES — MANNER SCORE
 // ============================================
 model MannerScore {
-  id              String @id @default(uuid())
-  userId          String @unique
-  conversationAvg Float  @default(0)
-  punctualityAvg  Float  @default(0)
-  remeetAvg       Float  @default(0)
-  overallScore    Float  @default(0)
-  totalReviews    Int    @default(0)
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  conversationAvg Float    @default(0)
+  punctualityAvg  Float    @default(0)
+  remeetAvg       Float    @default(0)
+  overallScore    Float    @default(0)
+  totalReviews    Int      @default(0)
   updatedAt       DateTime @updatedAt
+
+  user            User     @relation(fields: [userId], references: [id])
 }
 
 // ============================================
-// 3. ACTIVITIES — 활동
+// 3. ACTIVITIES
 // ============================================
 model Activity {
-  id            String           @id @default(uuid())
-  userId        String
-  category      ActivityCategory
-  timing        ActivityTiming
-  scheduledAt   DateTime
-  radiusKm      Int              @default(2)
-  groupSize     GroupSize        @default(ONE_ON_ONE)
-  message       String?
-  locationLat   Float
-  locationLng   Float
-  status        ActivityStatus   @default(ACTIVE)
-  createdAt     DateTime         @default(now())
-  expiresAt     DateTime
+  id          String           @id @default(uuid())
+  userId      String
+  category    ActivityCategory
+  timing      ActivityTiming
+  scheduledAt DateTime
+  radiusKm    Int              @default(2)
+  groupSize   GroupSize        @default(ONE_ON_ONE)
+  message     String?
+  locationLat Float
+  locationLng Float
+  status      ActivityStatus   @default(ACTIVE)
+  createdAt   DateTime         @default(now())
+  expiresAt   DateTime
 
-  user          User             @relation(fields: [userId], references: [id])
-  matches       Match[]
+  user        User             @relation(fields: [userId], references: [id])
+  matches     Match[]
 
   @@index([status, locationLat, locationLng])
   @@index([userId, createdAt])
@@ -142,23 +144,23 @@ enum ActivityStatus {
 }
 
 // ============================================
-// 4. MATCHES — 매칭
+// 4. MATCHES
 // ============================================
 model Match {
-  id            String      @id @default(uuid())
-  activityId    String
-  requesterId   String
-  accepterId    String
-  status        MatchStatus @default(PENDING)
-  chatRoomId    String?     @unique
-  createdAt     DateTime    @default(now())
-  respondedAt   DateTime?
+  id          String      @id @default(uuid())
+  activityId  String
+  requesterId String
+  accepterId  String
+  status      MatchStatus @default(PENDING)
+  chatRoomId  String?     @unique
+  createdAt   DateTime    @default(now())
+  respondedAt DateTime?
 
-  activity      Activity    @relation(fields: [activityId], references: [id])
-  requester     User        @relation("requester", fields: [requesterId], references: [id])
-  accepter      User        @relation("accepter", fields: [accepterId], references: [id])
-  chatRoom      ChatRoom?
-  meeting       Meeting?
+  activity    Activity    @relation(fields: [activityId], references: [id])
+  requester   User        @relation("requester", fields: [requesterId], references: [id])
+  accepter    User        @relation("accepter", fields: [accepterId], references: [id])
+  chatRoom    ChatRoom?
+  meeting     Meeting?
 
   @@index([requesterId, status])
   @@index([accepterId, status])
@@ -173,19 +175,19 @@ enum MatchStatus {
 }
 
 // ============================================
-// 5. CHAT — 채팅
+// 5. CHAT
 // ============================================
 model ChatRoom {
-  id            String        @id @default(uuid())
-  matchId       String        @unique
-  status        ChatRoomStatus @default(ACTIVE)
+  id             String         @id @default(uuid())
+  matchId        String         @unique
+  status         ChatRoomStatus @default(ACTIVE)
   timerStartedAt DateTime
   timerExpiresAt DateTime
-  createdAt     DateTime      @default(now())
-  closedAt      DateTime?
+  createdAt      DateTime       @default(now())
+  closedAt       DateTime?
 
-  match         Match         @relation(fields: [matchId], references: [id])
-  messages      ChatMessage[]
+  match          Match          @relation(fields: [matchId], references: [id])
+  messages       ChatMessage[]
 
   @@index([status, timerExpiresAt])
 }
@@ -220,22 +222,22 @@ enum MessageType {
 }
 
 // ============================================
-// 6. MEETINGS — 만남
+// 6. MEETINGS
 // ============================================
 model Meeting {
-  id            String        @id @default(uuid())
-  matchId       String        @unique
-  venueName     String
-  venueAddress  String?
-  venueLat      Float?
-  venueLng      Float?
-  scheduledAt   DateTime
-  status        MeetingStatus @default(CONFIRMED)
-  confirmedAt   DateTime      @default(now())
-  completedAt   DateTime?
+  id           String        @id @default(uuid())
+  matchId      String        @unique
+  venueName    String
+  venueAddress String?
+  venueLat     Float?
+  venueLng     Float?
+  scheduledAt  DateTime
+  status       MeetingStatus @default(CONFIRMED)
+  confirmedAt  DateTime      @default(now())
+  completedAt  DateTime?
 
-  match         Match         @relation(fields: [matchId], references: [id])
-  reviews       Review[]
+  match        Match         @relation(fields: [matchId], references: [id])
+  reviews      Review[]
 
   @@index([status, scheduledAt])
 }
@@ -248,29 +250,30 @@ enum MeetingStatus {
 }
 
 // ============================================
-// 7. REVIEWS — 평가
+// 7. REVIEWS
 // ============================================
 model Review {
-  id              String   @id @default(uuid())
-  meetingId       String
-  reviewerId      String
-  reviewedUserId  String
-  conversationScore Int    // 1-5
-  punctualityScore  Int    // 1-5
-  remeetScore       Int    // 1-5
-  comment         String?
-  createdAt       DateTime @default(now())
+  id               String   @id @default(uuid())
+  meetingId        String
+  reviewerId       String
+  reviewedUserId   String
+  conversationScore Int
+  punctualityScore  Int
+  remeetScore       Int
+  tags             String[]
+  comment          String?
+  createdAt        DateTime @default(now())
 
-  meeting         Meeting  @relation(fields: [meetingId], references: [id])
-  reviewer        User     @relation("reviewer", fields: [reviewerId], references: [id])
-  reviewedUser    User     @relation("reviewed", fields: [reviewedUserId], references: [id])
+  meeting          Meeting  @relation(fields: [meetingId], references: [id])
+  reviewer         User     @relation("reviewer", fields: [reviewerId], references: [id])
+  reviewedUser     User     @relation("reviewed", fields: [reviewedUserId], references: [id])
 
   @@unique([meetingId, reviewerId])
   @@index([reviewedUserId])
 }
 
 // ============================================
-// 8. REFERRALS — 친구 초대
+// 8. REFERRALS
 // ============================================
 model ReferralCode {
   id        String   @id @default(uuid())
@@ -303,16 +306,16 @@ enum ReferralStatus {
 }
 
 model ReferralReward {
-  id                    String   @id @default(uuid())
-  userId                String
-  rewardType            RewardType
-  startDate             DateTime
-  endDate               DateTime
-  isActive              Boolean  @default(true)
+  id                     String     @id @default(uuid())
+  userId                 String
+  rewardType             RewardType
+  startDate              DateTime
+  endDate                DateTime
+  isActive               Boolean    @default(true)
   triggeredByReferralIds String[]
-  createdAt             DateTime @default(now())
+  createdAt              DateTime   @default(now())
 
-  user                  User     @relation(fields: [userId], references: [id])
+  user                   User       @relation(fields: [userId], references: [id])
 
   @@index([userId, isActive])
   @@index([endDate])
@@ -324,20 +327,20 @@ enum RewardType {
 }
 
 // ============================================
-// 9. SUBSCRIPTIONS — 구독
+// 9. SUBSCRIPTIONS
 // ============================================
 model Subscription {
-  id                String             @id @default(uuid())
-  userId            String             @unique
-  plan              SubscriptionPlan
-  status            SubscriptionStatus @default(ACTIVE)
-  revenuecatId      String?
+  id                 String             @id @default(uuid())
+  userId             String             @unique
+  plan               SubscriptionPlan
+  status             SubscriptionStatus @default(ACTIVE)
+  revenuecatId       String?
   currentPeriodStart DateTime
   currentPeriodEnd   DateTime
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
 
-  user              User               @relation(fields: [userId], references: [id])
+  user               User               @relation(fields: [userId], references: [id])
 }
 
 enum SubscriptionPlan {
@@ -353,16 +356,16 @@ enum SubscriptionStatus {
 }
 
 model Purchase {
-  id            String       @id @default(uuid())
-  userId        String
-  productId     String
-  purchaseType  PurchaseType
-  amount        Int
-  currency      String       @default("KRW")
-  revenuecatId  String?
-  createdAt     DateTime     @default(now())
+  id           String       @id @default(uuid())
+  userId       String
+  productId    String
+  purchaseType PurchaseType
+  amount       Int
+  currency     String       @default("KRW")
+  revenuecatId String?
+  createdAt    DateTime     @default(now())
 
-  user          User         @relation(fields: [userId], references: [id])
+  user         User         @relation(fields: [userId], references: [id])
 
   @@index([userId, createdAt])
 }
@@ -375,20 +378,20 @@ enum PurchaseType {
 }
 
 // ============================================
-// 10. REPORTS — 신고
+// 10. REPORTS
 // ============================================
 model Report {
-  id            String       @id @default(uuid())
-  reporterId    String
+  id             String       @id @default(uuid())
+  reporterId     String
   reportedUserId String
-  reason        ReportReason
-  description   String?
-  status        ReportStatus @default(PENDING)
-  createdAt     DateTime     @default(now())
-  resolvedAt    DateTime?
+  reason         ReportReason
+  description    String?
+  status         ReportStatus @default(PENDING)
+  createdAt      DateTime     @default(now())
+  resolvedAt     DateTime?
 
-  reporter      User         @relation("reporter", fields: [reporterId], references: [id])
-  reportedUser  User         @relation("reported", fields: [reportedUserId], references: [id])
+  reporter       User         @relation("reporter", fields: [reporterId], references: [id])
+  reportedUser   User         @relation("reported", fields: [reportedUserId], references: [id])
 
   @@index([reportedUserId, status])
 }

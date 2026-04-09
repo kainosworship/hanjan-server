@@ -1,74 +1,24 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Expo, ExpoPushMessage } from 'expo-server-sdk';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../providers/prisma.service';
+import { Expo } from 'expo-server-sdk';
 
 @Injectable()
 export class NotificationsService {
-    private expo: Expo;
-    private readonly logger = new Logger(NotificationsService.name);
+  private readonly expo = new Expo();
 
-    constructor(private prisma: PrismaService) {
-        this.expo = new Expo();
-    }
+  constructor(private readonly prisma: PrismaService) {}
 
-    async sendPushNotification(userId: string, title: string, body: string, data?: any) {
-        const user = await this.prisma.user.findUnique({
-            where: { id: userId },
-            select: { expoPushToken: true },
-        });
+  async registerToken(userId: string, token: string) {
+    await this.prisma.user.update({ where: { id: userId }, data: { expoPushToken: token } });
+    return { registered: true };
+  }
 
-        if (!user?.expoPushToken || !Expo.isExpoPushToken(user.expoPushToken)) {
-            this.logger.warn(`User ${userId} does not have a valid Expo push token.`);
-            return;
-        }
+  async sendPushNotification(userId: string, title: string, body: string, data?: Record<string, unknown>) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId }, select: { expoPushToken: true } });
+    if (!user?.expoPushToken || !Expo.isExpoPushToken(user.expoPushToken)) return;
 
-        const messages: ExpoPushMessage[] = [
-            {
-                to: user.expoPushToken,
-                sound: 'default',
-                title,
-                body,
-                data,
-            },
-        ];
-
-        try {
-            const chunks = this.expo.chunkPushNotifications(messages);
-            for (const chunk of chunks) {
-                await this.expo.sendPushNotificationsAsync(chunk);
-            }
-            this.logger.log(`Push notification sent to user ${userId}`);
-        } catch (error) {
-            this.logger.error(`Error sending push notification to user ${userId}:`, error);
-        }
-    }
-
-    async sendToMultipleUsers(userIds: string[], title: string, body: string, data?: any) {
-        const users = await this.prisma.user.findMany({
-            where: { id: { in: userIds } },
-            select: { id: true, expoPushToken: true },
-        });
-
-        const messages: ExpoPushMessage[] = [];
-        for (const user of users) {
-            if (user.expoPushToken && Expo.isExpoPushToken(user.expoPushToken)) {
-                messages.push({
-                    to: user.expoPushToken,
-                    sound: 'default',
-                    title,
-                    body,
-                    data,
-                });
-            }
-        }
-
-        const chunks = this.expo.chunkPushNotifications(messages);
-        for (const chunk of chunks) {
-            try {
-                await this.expo.sendPushNotificationsAsync(chunk);
-            } catch (error) {
-                this.logger.error('Error sending batch push notifications', error);
-            }
-        }
-    }
+    await this.expo.sendPushNotificationsAsync([
+      { to: user.expoPushToken, title, body, data },
+    ]);
+  }
 }

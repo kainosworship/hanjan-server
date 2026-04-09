@@ -1,32 +1,20 @@
-import { Controller, Post, Body, UseGuards, Req } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards } from '@nestjs/common';
 import { NotificationsService } from './notifications.service';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { AuthUser } from '../../common/types/auth.types';
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
 
-@Controller('notifications')
+class RegisterTokenDto {
+  token: string;
+}
+
 @UseGuards(JwtAuthGuard)
+@Controller('notifications')
 export class NotificationsController {
-    constructor(private notificationsService: NotificationsService) { }
+  constructor(private readonly notificationsService: NotificationsService) {}
 
-    @Post('test')
-    async testPush(@Req() req: any) {
-        return this.notificationsService.sendPushNotification(
-            req.user.id,
-            '한잔 테스트 알림',
-            '알림 서버가 성공적으로 연결되었습니다! 🍺',
-            { test: true }
-        );
-    }
-
-    @Post('send-group')
-    async sendGroupPush(
-        @Body() data: { userIds: string[]; title: string; body: string; metadata?: any },
-    ) {
-        // This could be restricted to admin only in production
-        return this.notificationsService.sendToMultipleUsers(
-            data.userIds,
-            data.title,
-            data.body,
-            data.metadata
-        );
-    }
+  @Post('register-token')
+  registerToken(@CurrentUser() user: AuthUser, @Body() dto: RegisterTokenDto) {
+    return this.notificationsService.registerToken(user.id, dto.token);
+  }
 }

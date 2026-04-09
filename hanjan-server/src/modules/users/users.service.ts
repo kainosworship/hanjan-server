@@ -1,67 +1,63 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../providers/prisma.service';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 
 @Injectable()
 export class UsersService {
-    constructor(private prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
-    async findById(id: string) {
-        const user = await this.prisma.user.findUnique({
-            where: { id },
-            include: {
-                interests: true,
-                subscription: true,
-            },
-        });
-        if (!user) throw new NotFoundException('User not found');
-        return user;
-    }
+  async findById(id: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      include: { interests: true, mannerScore: true, subscription: true },
+    });
+    if (!user) throw new NotFoundException('사용자를 찾을 수 없습니다.');
+    return user;
+  }
 
-    async updateProfile(userId: string, data: { nickname?: string; bio?: string; interests?: string[] }) {
-        const { interests, ...profileData } = data;
+  async updateProfile(id: string, dto: UpdateProfileDto) {
+    return this.prisma.user.update({
+      where: { id },
+      data: {
+        nickname: dto.nickname,
+        bio: dto.bio,
+        profileImageUrl: dto.profileImageUrl,
+      },
+    });
+  }
 
-        return await this.prisma.$transaction(async (tx) => {
-            // Update basic profile
-            const user = await tx.user.update({
-                where: { id: userId },
-                data: profileData,
-            });
+  async updateLocation(id: string, lat: number, lng: number) {
+    return this.prisma.user.update({
+      where: { id },
+      data: { lastLocationLat: lat, lastLocationLng: lng, lastLocationAt: new Date() },
+    });
+  }
 
-            // Update interests if provided
-            if (interests) {
-                // Clear old interests
-                await tx.userInterest.deleteMany({ where: { userId } });
-                // Create new ones
-                await tx.userInterest.createMany({
-                    data: interests.map((tag) => ({ userId, tag })),
-                });
-            }
+  async getStats(id: string) {
+    const [activityCount, meetingCount] = await Promise.all([
+      this.prisma.activity.count({ where: { userId: id } }),
+      this.prisma.meeting.count({
+        where: { match: { OR: [{ requesterId: id }, { accepterId: id }] }, status: 'COMPLETED' },
+      }),
+    ]);
+    return { activityCount, meetingCount };
+  }
 
-            return user;
-        });
-    }
-
-    async updateLocation(userId: string, lat: number, lng: number) {
-        return this.prisma.user.update({
-            where: { id: userId },
-            data: {
-                lastLocationLat: lat,
-                lastLocationLng: lng,
-                lastLocationAt: new Date(),
-            },
-        });
-    }
-
-    async updatePushToken(userId: string, token: string) {
-        return this.prisma.user.update({
-            where: { id: userId },
-            data: { expoPushToken: token },
-        });
-    }
-
-    async getMannerScore(userId: string) {
-        return this.prisma.mannerScore.findUnique({
-            where: { userId },
-        });
-    }
+  async getPublicProfile(id: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        nickname: true,
+        bio: true,
+        profileImageUrl: true,
+        isIdVerified: true,
+        isSelfieVerified: true,
+        interests: true,
+        mannerScore: true,
+      },
+    });
+    if (!user) throw new NotFoundException('사용자를 찾을 수 없습니다.');
+    return user;
+  }
 }

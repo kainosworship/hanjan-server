@@ -1,0 +1,4 @@
+packages:
+  - "hanjan-app"
+  - "hanjan-server"
+  - "hanjan-shared"

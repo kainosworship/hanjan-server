@@ -1,19 +1,27 @@
-import { Controller, Get, Post, Body, Param, UseGuards, Req } from '@nestjs/common';
+import { Controller, Post, Get, Body, Param, UseGuards } from '@nestjs/common';
 import { ReviewsService } from './reviews.service';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { AuthUser } from '../../common/types/auth.types';
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { CreateReviewDto } from './dto/create-review.dto';
 
-@Controller('reviews')
 @UseGuards(JwtAuthGuard)
+@Controller('reviews')
 export class ReviewsController {
-    constructor(private reviewsService: ReviewsService) { }
+  constructor(private readonly reviewsService: ReviewsService) {}
 
-    @Post()
-    async submit(@Req() req: any, @Body() data: any) {
-        return this.reviewsService.submitReview(req.user.id, data);
-    }
+  @Post()
+  create(@CurrentUser() user: AuthUser, @Body() dto: CreateReviewDto) {
+    return this.reviewsService.create(user.id, dto);
+  }
 
-    @Get('profile/:userId')
-    async getProfile(@Param('userId') userId: string) {
-        return this.reviewsService.getUserMannerProfile(userId);
-    }
+  @Get('meeting/:meetingId')
+  getByMeeting(@Param('meetingId') meetingId: string) {
+    return this.reviewsService.getByMeeting(meetingId);
+  }
+
+  @Get('check/:meetingId')
+  checkCompleted(@CurrentUser() user: AuthUser, @Param('meetingId') meetingId: string) {
+    return this.reviewsService.checkCompleted(user.id, meetingId);
+  }
 }

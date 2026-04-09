@@ -1,7 +1,10 @@
-node_modules
-dist
-.expo
+node_modules/
+dist/
 .env
-.env.local
+.env.production
+.expo/
 *.log
 .DS_Store
+coverage/
+*.tsbuildinfo
+*.json 

@@ -1,33 +1,28 @@
-import { Controller, Post, Get, Body, UseGuards, Req } from '@nestjs/common';
+import { Controller, Post, Patch, Body, UseGuards } from '@nestjs/common';
 import { SafetyService } from './safety.service';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
-import { ReportReason } from '@prisma/client';
+import { AuthUser } from '../../common/types/auth.types';
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { CreateReportDto } from './dto/create-report.dto';
+import { EmergencyDto } from './dto/emergency.dto';
 
-@Controller('safety')
 @UseGuards(JwtAuthGuard)
+@Controller('safety')
 export class SafetyController {
-    constructor(private safetyService: SafetyService) { }
+  constructor(private readonly safetyService: SafetyService) {}
 
-    @Post('report')
-    async reportUser(
-        @Req() req: any,
-        @Body() data: { reportedUserId: string; reason: ReportReason; description?: string },
-    ) {
-        return this.safetyService.createReport(req.user.id, data);
-    }
+  @Post('report')
+  report(@CurrentUser() user: AuthUser, @Body() dto: CreateReportDto) {
+    return this.safetyService.createReport(user.id, dto);
+  }
 
-    @Post('verify-id')
-    async verifyId(@Req() req: any) {
-        return this.safetyService.verifyId(req.user.id);
-    }
+  @Post('emergency')
+  emergency(@CurrentUser() user: AuthUser, @Body() body: EmergencyDto) {
+    return this.safetyService.sendEmergency(user.id, body.location);
+  }
 
-    @Post('verify-selfie')
-    async verifySelfie(@Req() req: any, @Body() data: { imageUrl: string }) {
-        return this.safetyService.handleSelfieVerification(req.user.id, data.imageUrl);
-    }
-
-    @Get('my-reports')
-    async getMyReports(@Req() req: any) {
-        return this.safetyService.getReportStatus(req.user.id);
-    }
+  @Patch('location-share')
+  locationShare(@CurrentUser() user: AuthUser, @Body() body: { enabled: boolean }) {
+    return this.safetyService.updateLocationShare(user.id, body.enabled);
+  }
 }
