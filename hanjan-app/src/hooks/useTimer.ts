@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
-import { TIMER_CONSTANTS } from 'hanjan-shared';
+import { TIMER_CONSTANTS } from '@/shared';
 
 interface UseTimerOptions {
   initialSeconds?: number;

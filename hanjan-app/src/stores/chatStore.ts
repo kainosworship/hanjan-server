@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { ChatRoom, ChatMessage } from 'hanjan-shared';
+import type { ChatRoom, ChatMessage } from '@/shared';
 
 interface ChatState {
   rooms: ChatRoom[];

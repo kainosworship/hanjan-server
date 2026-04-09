@@ -1,6 +1,6 @@
 import { apiGet, apiPost } from '@/services/apiClient';
 import { useMatchStore } from '@/stores/matchStore';
-import type { Match } from 'hanjan-shared';
+import type { Match } from '@/shared';
 
 export function useMatching() {
   const { pendingMatches, setPendingMatches, removePendingMatch, setActiveMatch } = useMatchStore();

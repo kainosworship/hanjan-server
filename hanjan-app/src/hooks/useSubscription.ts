@@ -1,6 +1,6 @@
 import { apiGet } from '@/services/apiClient';
 import { useSubscriptionStore } from '@/stores/subscriptionStore';
-import type { Subscription, PlusAccess } from 'hanjan-shared';
+import type { Subscription, PlusAccess } from '@/shared';
 
 export function useSubscription() {
   const { subscription, plusAccess, setSubscription, setPlusAccess } = useSubscriptionStore();

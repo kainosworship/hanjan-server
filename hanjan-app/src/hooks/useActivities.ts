@@ -1,6 +1,6 @@
 import { apiGet, apiPost, apiPatch } from '@/services/apiClient';
 import { useActivityStore } from '@/stores/activityStore';
-import type { Activity, ActivityCard, CreateActivityDto, NearbyActivitiesQuery } from 'hanjan-shared';
+import type { Activity, ActivityCard, CreateActivityDto, NearbyActivitiesQuery } from '@/shared';
 
 export function useActivities() {
   const { nearbyActivities, myActivities, setNearbyActivities, setMyActivities, addActivity } = useActivityStore();

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Match } from 'hanjan-shared';
+import type { Match } from '@/shared';
 
 interface MatchState {
   pendingMatches: Match[];

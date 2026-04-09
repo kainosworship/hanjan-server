@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { colors, typography, spacing, radius } from '@/theme';
-import type { ChatMessage } from 'hanjan-shared';
+import type { ChatMessage } from '@/shared';
 
 interface Props {
   message: ChatMessage;

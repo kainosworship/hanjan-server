@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { ReferralCode, ReferralReward } from 'hanjan-shared';
+import type { ReferralCode, ReferralReward } from '@/shared';
 
 interface ReferralState {
   code: ReferralCode | null;

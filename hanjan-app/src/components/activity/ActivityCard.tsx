@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { colors, typography, spacing, radius } from '@/theme';
-import type { ActivityCard as ActivityCardType } from 'hanjan-shared';
+import type { ActivityCard as ActivityCardType } from '@/shared';
 
 const CATEGORY_META: Record<string, { emoji: string; label: string; color: string; bg: string }> = {
   COFFEE: { emoji: '☕', label: '커피 한잔', color: colors.category.coffee, bg: colors.category.coffeeBg },

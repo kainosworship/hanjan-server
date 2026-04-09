@@ -1,6 +1,6 @@
 import { apiGet } from '@/services/apiClient';
 import { useChatStore } from '@/stores/chatStore';
-import type { ChatRoom, ChatMessage } from 'hanjan-shared';
+import type { ChatRoom, ChatMessage } from '@/shared';
 
 export function useChat() {
   const { rooms, messages, setRooms, setMessages, addMessage } = useChatStore();

@@ -1,6 +1,6 @@
 import { apiGet, apiPost } from '@/services/apiClient';
 import { useReferralStore } from '@/stores/referralStore';
-import type { ReferralCode, ReferralReward } from 'hanjan-shared';
+import type { ReferralCode, ReferralReward } from '@/shared';
 
 interface ReferralStatus {
   totalInvited: number;

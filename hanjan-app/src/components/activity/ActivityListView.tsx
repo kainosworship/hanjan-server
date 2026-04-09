@@ -2,7 +2,7 @@ import React from 'react';
 import { FlatList, View, Text, StyleSheet, RefreshControl } from 'react-native';
 import { colors, typography, spacing } from '@/theme';
 import { ActivityCard } from './ActivityCard';
-import type { ActivityCard as ActivityCardType } from 'hanjan-shared';
+import type { ActivityCard as ActivityCardType } from '@/shared';
 
 interface Props {
   activities: ActivityCardType[];

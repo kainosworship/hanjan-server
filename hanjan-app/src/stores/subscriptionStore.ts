@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Subscription, PlusAccess } from 'hanjan-shared';
+import type { Subscription, PlusAccess } from '@/shared';
 
 interface SubscriptionState {
   subscription: Subscription | null;

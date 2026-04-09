@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import { colors, typography, spacing, radius } from '@/theme';
-import type { Match } from 'hanjan-shared';
+import type { Match } from '@/shared';
 
 interface MatchUser {
   nickname: string;

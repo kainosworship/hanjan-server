@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Activity, ActivityCard } from 'hanjan-shared';
+import type { Activity, ActivityCard } from '@/shared';
 
 interface ActivityState {
   nearbyActivities: ActivityCard[];

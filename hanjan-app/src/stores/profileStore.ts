@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { User, MannerScore } from 'hanjan-shared';
+import type { User, MannerScore } from '@/shared';
 
 interface ProfileState {
   profile: User | null;
