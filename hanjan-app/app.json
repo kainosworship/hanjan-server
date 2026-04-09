@@ -113,6 +113,14 @@
     "experiments": {
       "typedRoutes": true
     },
-    "owner": "blessnovas-organization"
+    "owner": "blessnovas-organization",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "563ffb5c-5071-484c-8846-3f7be8e48699"
+      }
+    }
   }
 }
