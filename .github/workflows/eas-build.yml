@@ -20,21 +20,16 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           version: 9
+      - name: Create standalone build directory
+        run: |
+          cp -r hanjan-app /tmp/hanjan-standalone
+          rm -f /tmp/hanjan-standalone/pnpm-workspace.yaml
+          rm -rf /tmp/hanjan-standalone/.expo
       - name: Install dependencies
-        working-directory: hanjan-app
-        run: pnpm install --ignore-workspace
-      - name: Remove all workspace configs
-        run: |
-          rm -f pnpm-workspace.yaml
-          rm -f hanjan-app/pnpm-workspace.yaml
-      - name: Debug structure
-        working-directory: hanjan-app
-        run: |
-          echo "=== pwd ===" && pwd
-          echo "=== parent files ===" && ls ..
-          echo "=== app.json projectId ===" && node -e "const a=JSON.parse(require('fs').readFileSync('app.json','utf8')); console.log(a.expo.extra?.eas?.projectId, a.expo.slug);"
+        working-directory: /tmp/hanjan-standalone
+        run: pnpm install
       - name: Build Android
-        working-directory: hanjan-app
+        working-directory: /tmp/hanjan-standalone
         run: npx eas-cli@latest build --platform android --profile ${{ github.event.inputs.profile }} --non-interactive
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
