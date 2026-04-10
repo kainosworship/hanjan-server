@@ -1,10 +1,12 @@
+
 name: EAS Android Build
 on:
   workflow_dispatch:
     inputs:
       profile:
-        description: 'Build profile'
-        default: 'production'
+        description: Build profile
+        default: production
+
 jobs:
   build:
     name: Build Android
@@ -12,25 +14,36 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9
+
       - name: Create standalone build directory
         run: |
           cp -r hanjan-app /tmp/hanjan-standalone
           rm -f /tmp/hanjan-standalone/pnpm-workspace.yaml
           rm -rf /tmp/hanjan-standalone/.expo
+
+      - name: Configure pnpm for React Native
+        working-directory: /tmp/hanjan-standalone
+        run: |
+          echo "node-linker=hoisted" > .npmrc
+          echo "shamefully-hoist=true" >> .npmrc
+
       - name: Install dependencies
         working-directory: /tmp/hanjan-standalone
         run: pnpm install --no-frozen-lockfile
+
       - name: Build Android
         working-directory: /tmp/hanjan-standalone
-        run: npx eas-cli@latest build --platform android --profile ${{ github.event.inputs.profile }} --non-interactive
+        run: npx eas-cli@latest build --platform android --profile production --non-interactive
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
           EAS_NO_VCS: "1"
