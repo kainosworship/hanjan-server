@@ -27,7 +27,7 @@ jobs:
           rm -rf /tmp/hanjan-standalone/.expo
       - name: Install dependencies
         working-directory: /tmp/hanjan-standalone
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
       - name: Build Android
         working-directory: /tmp/hanjan-standalone
         run: npx eas-cli@latest build --platform android --profile ${{ github.event.inputs.profile }} --non-interactive
