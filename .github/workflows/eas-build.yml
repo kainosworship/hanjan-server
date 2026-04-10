@@ -22,9 +22,17 @@ jobs:
           version: 9
       - name: Install dependencies
         working-directory: hanjan-app
-        run: pnpm install
-      - name: Hide parent workspace config
-        run: mv pnpm-workspace.yaml pnpm-workspace.yaml.bak
+        run: pnpm install --ignore-workspace
+      - name: Remove all workspace configs
+        run: |
+          rm -f pnpm-workspace.yaml
+          rm -f hanjan-app/pnpm-workspace.yaml
+      - name: Debug structure
+        working-directory: hanjan-app
+        run: |
+          echo "=== pwd ===" && pwd
+          echo "=== parent files ===" && ls ..
+          echo "=== app.json projectId ===" && node -e "const a=JSON.parse(require('fs').readFileSync('app.json','utf8')); console.log(a.expo.extra?.eas?.projectId, a.expo.slug);"
       - name: Build Android
         working-directory: hanjan-app
         run: npx eas-cli@latest build --platform android --profile ${{ github.event.inputs.profile }} --non-interactive
