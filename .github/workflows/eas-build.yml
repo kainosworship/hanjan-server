@@ -23,6 +23,8 @@ jobs:
       - name: Install dependencies
         working-directory: hanjan-app
         run: pnpm install
+      - name: Hide parent workspace config
+        run: mv pnpm-workspace.yaml pnpm-workspace.yaml.bak
       - name: Build Android
         working-directory: hanjan-app
         run: npx eas-cli@latest build --platform android --profile ${{ github.event.inputs.profile }} --non-interactive
